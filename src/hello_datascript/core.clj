@@ -139,29 +139,24 @@
 
 ;; This is significantly slower than SQLite code below:
 (defn- bench-O2 [n]
-  (let ;; rules:
-      [r (quote [[(follows ?a ?b)
-                  [?a ?b]]
-                 [(follows ?a ?b)
-                  [?a ?x]
-                  (follows ?x ?b)]])
-       ;; query:
-       q (quote [:find ?a ?b
-                 :in $ %
-                 :where (follows ?a ?b)])
-       ;; data:
-       $ (map vector (range n) (map inc (range n)))]
-    (d/q q $ r)))
+  (let [rules (quote
+               [[(follows ?a ?b)
+                 [?a ?b]]
+                [(follows ?a ?b)
+                 [?a ?x]
+                 (follows ?x ?b)]])
+        query (quote
+               [:find ?a ?b
+                :in $ %
+                :where (follows ?a ?b)])
+       data (map vector (range n) (map inc (range n)))]
+    (d/q query data rules)))
 
-;; (time (count (bench-O2 200)))
-;; "Elapsed time: 7549.735629 msecs"
-;; "Elapsed time: 7139.634695 msecs"
-;; "Elapsed time: 7144.490759 msecs"
-;; "Elapsed time: 7120.88119 msecs"
-;; "Elapsed time: 6985.079482 msecs"
-;; "Elapsed time: 6911.712038 msecs"
-;; "Elapsed time: 6903.730371 msecs"
-;; 20100
+(comment
+  (time (count (bench-O2 200)))
+  =>
+  "Elapsed time: 6256.472844 msecs"
+  20100)
 
 (defn- bench-O2-v2 [n]
   (let ;; rules:
