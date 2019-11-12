@@ -1,5 +1,6 @@
 (ns hello-datascript.core
-  (:require [datascript.core :as d]))
+  (:require [datascript.core :as d]
+            [criterium.core :as c]))
 
 (defn- test-3 []
   ;; Here the database is a rectangular table, a "relation",
@@ -151,7 +152,11 @@
         query (quote
                [:find ?a ?b
                 :in $ %
-                :where (follows ?a ?b)])
+                :where
+                ;; [0 ?b] --- would be fast
+                (follows ?a ?b)
+                ;; [0 ?b] --- would be slow
+                ])
         ;; Looks like ([0 1] [1 2] [2 3]) for n = 3:
         data (for [i (range n)]
                [i (inc i)])]
@@ -162,6 +167,15 @@
   (bench-O2 3)
   =>
   #{[2 3] [1 3] [0 3] [0 2] [1 2] [0 1]}
+  ;; This looks even steeper than O(n^2):
+  ;; n =   3 =>    2.459736 ms
+  ;; n =   6 =>    4.883212 ms
+  ;; n =  12 =>   12.414191 ms
+  ;; n =  24 =>   38.799325 ms
+  ;; n =  48 =>  160.912901 ms
+  ;; n =  96 =>  835.780947 ms
+  ;; n = 192 => 5.352475 s
+  (c/quick-bench (bench-O2 192))
 
   ;; Takes >6s to compute n * (n + 1) / 2 elements for n = 200:
   (time (count (bench-O2 200)))
