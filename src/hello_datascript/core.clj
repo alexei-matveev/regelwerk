@@ -1,4 +1,4 @@
-(ns hello-world.datascript
+(ns hello-datascript.core
   (:require [datascript.core :as d]))
 
 (defn- test-3 []

@@ -5,6 +5,6 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [datascript "0.18.7"]]
-  :main ^:skip-aot hello-world.datascript
+  :main ^:skip-aot hello-datascript.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
