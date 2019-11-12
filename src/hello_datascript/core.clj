@@ -167,6 +167,13 @@
   (bench-O2 3)
   =>
   #{[2 3] [1 3] [0 3] [0 2] [1 2] [0 1]}
+
+  ;; Takes >6s to compute n * (n + 1) / 2 elements for n = 200:
+  (time (count (bench-O2 200)))
+  =>
+  "Elapsed time: 6256.472844 msecs"
+  20100
+
   ;; This looks even steeper than O(n^2):
   ;; n =   3 =>    2.459736 ms
   ;; n =   6 =>    4.883212 ms
@@ -175,13 +182,7 @@
   ;; n =  48 =>  160.912901 ms
   ;; n =  96 =>  835.780947 ms
   ;; n = 192 => 5.352475 s
-  (c/quick-bench (bench-O2 192))
-
-  ;; Takes >6s to compute n * (n + 1) / 2 elements for n = 200:
-  (time (count (bench-O2 200)))
-  =>
-  "Elapsed time: 6256.472844 msecs"
-  20100)
+  (c/quick-bench (bench-O2 192)))
 
 (defn- bench-O2-v2 [n]
   (let ;; rules:
