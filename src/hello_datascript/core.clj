@@ -158,9 +158,9 @@
                 ;; [0 ?b] --- would be slow
                 ])
         ;; Looks like ([0 1] [1 2] [2 3]) for n = 3:
-        data (for [i (range n)]
+        db (for [i (range n)]
                [i (inc i)])]
-    (d/q query data rules)))
+    (d/q query db rules)))
 
 (comment
   ;; Fine for small n = 3:
@@ -185,24 +185,31 @@
   (c/quick-bench (bench-O2 192)))
 
 (defn- bench-O2-v2 [n]
-  (let ;; rules:
-      [r (quote [[(follows ?a ?b)
-                  [?a :lt ?b]]
-                 [(follows ?a ?b)
-                  [?a :lt ?x]
-                  (follows ?x ?b)]])
-       ;; query:
-       q (quote [:find ?a ?b
-                 :in $ %
-                 :where (follows ?a ?b)])
-       ;; data:
-       tx-data (for [i (range n)]
-                 [:db/add i :lt (inc i)])
-       ;; real db with datoms:
-       db (d/db-with (d/empty-db) tx-data)]
-    (d/q q db r)))
+  (let [rules (quote
+               [[(follows ?a ?b)
+                 [?a :lt ?b]]
+                [(follows ?a ?b)
+                 [?a :lt ?x]
+                 (follows ?x ?b)]])
+        query (quote
+               [:find ?a ?b
+                :in $ %
+                :where
+                (follows ?a ?b)])
+        ;; Data. For some reason 0 ist no more a valid entity ID, start
+        ;; counting at 1:
+        tx-data (for [i (range 1 (inc n))]
+                  [:db/add i :lt (inc i)])
+        ;; real db with datoms:
+        db (d/db-with (d/empty-db) tx-data)]
+    (d/q query db rules)))
 
-;; (time (count (bench-O2-v2 200)))
+;; Not any better:
+(comment
+  (time (count (bench-O2-v2 200)))
+  =>
+  "Elapsed time: 5946.798873 msecs"
+  20100)
 
 ;; drop table if exists db;
 ;; create table db (x integer, y integer);
