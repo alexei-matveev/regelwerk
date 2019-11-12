@@ -137,22 +137,33 @@
   (d/q q a b r))
 ;; #{[1 "four"] [3 "four"] [1 "three"] [2 "four"] [1 "two"] [2 "three"]}
 
-;; This is significantly slower than SQLite code below:
+;; This is significantly slower than SQLite code below:. See also
+;; https://stackoverflow.com/questions/42457136/recursive-datalog-queries-for-datomic-really-slow
 (defn- bench-O2 [n]
   (let [rules (quote
                [[(follows ?a ?b)
                  [?a ?b]]
+                ;; Order of  clauses matters! Recursion in  1st or 2nd
+                ;; positon does not:
                 [(follows ?a ?b)
-                 [?a ?x]
-                 (follows ?x ?b)]])
+                 [?x ?b]
+                 (follows ?a ?x)]])
         query (quote
                [:find ?a ?b
                 :in $ %
                 :where (follows ?a ?b)])
-       data (map vector (range n) (map inc (range n)))]
+        ;; Looks like ([0 1] [1 2] [2 3]) for n = 3:
+        data (for [i (range n)]
+               [i (inc i)])]
     (d/q query data rules)))
 
 (comment
+  ;; Fine for small n = 3:
+  (bench-O2 3)
+  =>
+  #{[2 3] [1 3] [0 3] [0 2] [1 2] [0 1]}
+
+  ;; Takes >6s to compute n * (n + 1) / 2 elements for n = 200:
   (time (count (bench-O2 200)))
   =>
   "Elapsed time: 6256.472844 msecs"
@@ -215,4 +226,5 @@
 ;; Run Time: real 0.047 user 0.044000 sys 0.000000
 
 (defn -main []
-  (println "Hello, Datascript!"))
+  (println "Hello, Datascript!")
+  (time (println (count (bench-O2 200)))))
