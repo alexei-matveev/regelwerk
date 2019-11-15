@@ -254,23 +254,24 @@
 (defn- test-tabular [n]
   (let [db (make-eav-table n)]
     #_(println db)
-    (d/q '[:find (count ?v)
+    (d/q (quote
+          [:find (count ?v).            ; point ist for scalar
            :in $db
            :where
            [$db ?e1 :a ?v]
            [$db ?e2 :a ?v]
            ;; You cannot put it between two clauses:
-           [(> ?e2 ?e1)]]
+           [(> ?e2 ?e1)]])
          db)))
 
 (comment
   ;; It  takes  ~15s  to  find  doppelgaenger in  a  array  of  random
-  ;; numbers. The result  ist also random but  should be statistically
+  ;; numbers. The  result is also  random but should  be statistically
   ;; slightly above a 1/4th of that million:
   (time (test-tabular (* 1000 1000)))
   =>
   "Elapsed time: 14683.982279 msecs"
-  ([263927])
+  263927
 
   ;; Those 15s  is *much* less  that it  takes to iterate  over 10**12
   ;; loop. Here it took 6s to  iterate over 10**10, so the estimate is
@@ -280,6 +281,24 @@
      (dotimes [x (* n n)]
        (+ 1 2)))))
 
+(defn- test-two-tables [n]
+  (let [a (make-eav-table n)
+        b (make-eav-table n)]
+    (d/q (quote
+          [:find (count ?v) .           ; point ist for scalar
+           :in $a $b
+           :where
+           [$a ?e1 :a ?v]
+           [$b ?e2 :a ?v]])
+         a
+         b)))
+
+(comment
+  ;; Cross checking without third clause takes less time.
+  (time (test-two-tables (* 1000 1000)))
+  =>
+  "Elapsed time: 9715.228009 msecs"
+  399358)
 
 (defn -main []
   (println "Hello, Datascript!")
