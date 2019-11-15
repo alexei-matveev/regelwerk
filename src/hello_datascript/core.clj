@@ -53,8 +53,7 @@
          :with ?monster
          :in [[?monster _ ?heads]]
          :where
-         [_ :ok ?heads]
-         ]
+         [_ :ok ?heads]]
        ;; inputs
        [["Cerberus" :ok 3]
         ["Medusa" :ok 1]
@@ -246,6 +245,18 @@
 ;; count (*)
 ;; 20100
 ;; Run Time: real 0.047 user 0.044000 sys 0.000000
+
+(defn- make-eav-table [n]
+  (vec
+   (for [x (range n)]
+     [x :a (+ 1000 (rand-int n))])))
+
+(defn- test-tabular [n]
+  (let [db (make-eav-table n)]
+    (d/q '[:find ?e ?v
+           :in [[?e ?a ?v]]]
+         db)))
+
 
 (defn -main []
   (println "Hello, Datascript!")
