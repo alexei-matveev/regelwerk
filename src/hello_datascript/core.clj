@@ -253,9 +253,32 @@
 
 (defn- test-tabular [n]
   (let [db (make-eav-table n)]
-    (d/q '[:find ?e ?v
-           :in [[?e ?a ?v]]]
+    #_(println db)
+    (d/q '[:find (count ?v)
+           :in $db
+           :where
+           [$db ?e1 :a ?v]
+           [$db ?e2 :a ?v]
+           ;; You cannot put it between two clauses:
+           [(> ?e2 ?e1)]]
          db)))
+
+(comment
+  ;; It  takes  ~15s  to  find  doppelgaenger  1mio  array  of  random
+  ;; numbers. The result  ist also random but  shoul dbe statistically
+  ;; close:
+  (time (test-tabular (* 1000 1000)))
+  =>
+  "Elapsed time: 14683.982279 msecs"
+  ([263927])
+
+  ;; Those 15s  is *much* less  that it  takes to iterate  over 10**12
+  ;; loop. Here it took 6s to  iterate over 10**10, so the estimate is
+  ;; it would take 600s for 10**12:
+  (time
+   (let [n (* 1000 100)]
+     (dotimes [x (* n n)]
+       (+ 1 2)))))
 
 
 (defn -main []
