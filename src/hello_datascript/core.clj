@@ -264,9 +264,9 @@
          db)))
 
 (comment
-  ;; It  takes  ~15s  to  find  doppelgaenger  1mio  array  of  random
-  ;; numbers. The result  ist also random but  shoul dbe statistically
-  ;; close:
+  ;; It  takes  ~15s  to  find  doppelgaenger in  a  array  of  random
+  ;; numbers. The result  ist also random but  should be statistically
+  ;; slightly above a 1/4th of that million:
   (time (test-tabular (* 1000 1000)))
   =>
   "Elapsed time: 14683.982279 msecs"
