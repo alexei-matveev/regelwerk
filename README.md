@@ -1,36 +1,11 @@
-# hello-world
+# hello-datascript
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
-
-## Usage
-
-FIXME: explanation
-
-    $ java -jar hello-world-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+Learning [Datascript](https://github.com/tonsky/datascript) dialect of
+Datalog.
 
 ## License
 
-Copyright © 2015 FIXME
+Copyright © 2015 Alexei Matveev <alexei.matveev@gmail.com>
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
