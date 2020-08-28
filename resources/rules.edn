@@ -1,0 +1,8 @@
+;; Rules
+[[(follows ?a ?b)
+  [?a ?b]]
+ [(follows ?a ?b)
+  [?x ?b]
+  (follows ?a ?x)]]
+
+

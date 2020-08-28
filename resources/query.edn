@@ -1,0 +1,6 @@
+;; Query
+[:find ?a ?b
+ :in $ %
+ :where
+ (follows ?a ?b)]
+
