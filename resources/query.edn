@@ -2,5 +2,5 @@
 [:find ?a ?b
  :in $ %
  :where
- (follows ?a ?b)]
+ (lt ?a ?b)]
 
