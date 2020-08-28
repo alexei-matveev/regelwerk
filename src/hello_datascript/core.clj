@@ -255,7 +255,7 @@
   (let [db (make-eav-table n)]
     #_(println db)
     (d/q (quote
-          [:find (count ?v).            ; point ist for scalar
+          [:find (count ?v) .           ; point ist for scalar
            :in $db
            :where
            [$db ?e1 :a ?v]
