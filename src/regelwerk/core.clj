@@ -1,9 +1,12 @@
 (ns regelwerk.core
-  (:require [datascript.core :as d]))
+  (:require [datascript.core :as d]
+            [clojure.java.io :as io]
+            [clojure.edn :as edn]))
 
-;; This is significantly slower than SQLite code below:. See also
+;; This is significantly slower than the compareable SQLite code. See
+;; also
 ;; https://stackoverflow.com/questions/42457136/recursive-datalog-queries-for-datomic-really-slow
-(defn- bench-O2 [n]
+(defn- unused-example [n]
   (let [rules (quote
                [[(follows ?a ?b)
                  [?a ?b]]
@@ -25,6 +28,15 @@
                [i (inc i)])]
     (d/q query db rules)))
 
-(defn -main []
-  (println "Hello, Datascript!")
-  (time (println (count (bench-O2 200)))))
+(defn- parse [path]
+  (edn/read (java.io.PushbackReader. (io/reader path))))
+
+(defn -main [db-file rules-file query-file]
+  (let [db (parse db-file)
+        rules (parse rules-file)
+        query (parse query-file)]
+    (comment
+      {:db db,
+       :rules rules,
+       :query query})
+    (println (d/q query db rules))))
