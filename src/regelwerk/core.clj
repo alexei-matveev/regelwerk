@@ -1,4 +1,4 @@
-(ns hello-datascript.core
+(ns regelwerk.core
   (:require [datascript.core :as d]))
 
 ;; This is significantly slower than SQLite code below:. See also
