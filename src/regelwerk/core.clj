@@ -29,12 +29,20 @@
 ;; https://www.braveclojure.com/writing-macros/
 (defmacro genrel
   "Generate new relation from exsiting facts and rules"
-  [infixed]
-  (list (second infixed) (first infixed) (last infixed)))
+  [vars where facts]
+  (list [:find vars 'in '$ :where where] facts))
 
 (comment
-  (macroexpand '(genrel (1 + 2))) => (+ 1 2)
-  (genrel (1 + 2)) => 3)
+  (macroexpand '(genrel [?a ?b]
+                        [[?a :is ?b]]
+                        [[1 :is "odd"]
+                         [2 :is "even"]]))
+  =>
+  ([:find [?a ?b]
+    in $
+    :where [[?a :is ?b]]]
+   [[1 :is "odd"]
+    [2 :is "even"]]))
 
 (defn- parse [path]
   (edn/read (java.io.PushbackReader. (io/reader path))))
