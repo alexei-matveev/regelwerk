@@ -26,6 +26,16 @@
   =>
   #{[2 3] [1 3] [0 3] [0 2] [1 2] [0 1]})
 
+;; https://www.braveclojure.com/writing-macros/
+(defmacro genrel
+  "Generate new relation from exsiting facts and rules"
+  [infixed]
+  (list (second infixed) (first infixed) (last infixed)))
+
+(comment
+  (macroexpand '(genrel (1 + 2))) => (+ 1 2)
+  (genrel (1 + 2)) => 3)
+
 (defn- parse [path]
   (edn/read (java.io.PushbackReader. (io/reader path))))
 
