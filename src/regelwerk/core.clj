@@ -31,11 +31,12 @@
   "Generate new relation from exsiting facts and rules"
   [vars where facts]
   (list
-   (concat [:find]
-           vars
-           ['in '$]
-           [:where]
-           where)
+   (vec
+    (concat [:find]
+            vars
+            '[in $]
+            [:where]
+            where))
    facts))
 
 (comment
@@ -45,7 +46,7 @@
             [[1 :is "odd"]
              [2 :is "even"]]))
   =>
-  ((:find ?a ?b in $ :where [?a :is ?b])
+  ([:find ?a ?b in $ :where [?a :is ?b]]
    [[1 :is "odd"] [2 :is "even"]]))
 
 (defn- parse [path]
