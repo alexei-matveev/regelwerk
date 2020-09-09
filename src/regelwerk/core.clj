@@ -31,12 +31,17 @@
 (defn- parse [path]
   (edn/read (java.io.PushbackReader. (io/reader path))))
 
-(defn -main [db-file rules-file query-file]
+(defn- main [db-file rules-file query-file]
   (let [db (parse db-file)
         rules (parse rules-file)
         query (parse query-file)]
-    (comment
-      {:db db,
-       :rules rules,
-       :query query})
-    (println (d/q query db rules))))
+    (d/q query db rules)))
+
+(defn -main [& args]
+  (println (apply main args)))
+
+;; For your C-x C-e pleasure:
+(comment
+  (main "resources/db.edn"
+        "resources/rules.edn"
+        "resources/query.edn"))
