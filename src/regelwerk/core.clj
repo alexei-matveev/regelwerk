@@ -30,13 +30,9 @@
 (defmacro genrel
   "Generate new relation from exsiting facts and rules"
   [vars where facts]
-  (let [q (vec
-           (concat [:find]
-                   vars
-                   '[in $]
-                   [:where]
-                   where))]
-    (list 'println (str q) facts)))
+  (let [q (vec (concat [:find] vars '[:in $] [:where] where))
+        qq (list 'quote q)]
+    (list 'd/q qq facts)))
 
 (comment
   (macroexpand
@@ -44,11 +40,12 @@
             [[?a :is ?b]]
             [[1 :is "odd"]
              [2 :is "even"]]))
-  =>
-  (println "[:find ?a ?b in $ :where [?a :is ?b]]"
+  (genrel [?a ?b]
+           [[?a :is ?b]]
            [[1 :is "odd"]
             [2 :is "even"]])
-)
+  =>
+  #{[1 "odd"] [2 "even"]})
 
 (defn- parse [path]
   (edn/read (java.io.PushbackReader. (io/reader path))))
