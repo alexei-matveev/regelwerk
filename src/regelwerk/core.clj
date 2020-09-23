@@ -26,11 +26,18 @@
   =>
   #{[2 3] [1 3] [0 3] [0 2] [1 2] [0 1]})
 
+(defn- make-query [vars where]
+  (vec (concat [:find] vars '[:in $] [:where] where)))
+
+;; (make-query '[?a ?b] '[[?a :is ?b]])
+;; =>
+;; [:find ?a ?b :in $ :where [?a :is ?b]]
+
 ;; https://www.braveclojure.com/writing-macros/
 (defmacro genrel
   "Generate new relation from exsiting facts and rules"
   [vars where facts]
-  (let [q (vec (concat [:find] vars '[:in $] [:where] where))
+  (let [q (make-query vars where)
         qq (list 'quote q)]
     (list 'd/q qq facts)))
 
@@ -45,6 +52,10 @@
   ;; then vars when
   ;; then when vars
   ;;
+  (defrule [?a ?b]
+    [[?a :is ?b]] => [[:a ?a :b ?b]])
+  (defrule named-rule [?a ?b]
+    [[?a :is ?b]] => [[:a ?a :b ?b]])
   (forall [?a ?b] [[?a :is ?b]] => [[:a ?a :b ?b]])
   (for-each [?a ?b] :where [[?a :is ?b]] => [:a ?a :b ?b])
   (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
