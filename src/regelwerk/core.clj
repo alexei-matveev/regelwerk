@@ -35,6 +35,20 @@
     (list 'd/q qq facts)))
 
 (comment
+  ;;
+  ;; Many possible syntaxes for rules ...
+  ;;
+  ;; vars when then
+  ;; vars then when
+  ;; when then vars
+  ;; when vars then
+  ;; then vars when
+  ;; then when vars
+  ;;
+  (forall [?a ?b] [[?a :is ?b]] => [[:a ?a :b ?b]])
+  (for-each [?a ?b] :where [[?a :is ?b]] => [:a ?a :b ?b])
+  (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
+  (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]])
   (macroexpand
    '(genrel [?a ?b]
             [[?a :is ?b]]
