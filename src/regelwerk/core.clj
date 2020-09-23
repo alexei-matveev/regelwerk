@@ -26,21 +26,6 @@
   =>
   #{[2 3] [1 3] [0 3] [0 2] [1 2] [0 1]})
 
-(defn- make-query [vars where]
-  (vec (concat [:find] vars '[:in $] [:where] where)))
-
-;; (make-query '[?a ?b] '[[?a :is ?b]])
-;; =>
-;; [:find ?a ?b :in $ :where [?a :is ?b]]
-
-;; https://www.braveclojure.com/writing-macros/
-(defmacro genrel
-  "Generate new relation from exsiting facts and rules"
-  [vars where facts]
-  (let [q (make-query vars where)
-        qq (list 'quote q)]
-    (list 'd/q qq facts)))
-
 (comment
   ;;
   ;; Many possible syntaxes for rules. This is plain data:
@@ -64,16 +49,35 @@
   (forall [?a ?b] [[?a :is ?b]] => [[:a ?a :b ?b]])
   (for-each [?a ?b] :where [[?a :is ?b]] => [:a ?a :b ?b])
   (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
-  (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]])
-  (macroexpand
-   '(genrel [?a ?b]
-            [[?a :is ?b]]
-            [[1 :is "odd"]
-             [2 :is "even"]]))
-  (genrel [?a ?b]
-           [[?a :is ?b]]
-           [[1 :is "odd"]
-            [2 :is "even"]])
+  (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]]))
+
+(defn- make-query [vars where]
+  (vec (concat [:find] vars '[:in $] [:where] where)))
+
+;; (make-query '[?a ?b] '[[?a :is ?b]])
+;; =>
+;; [:find ?a ?b :in $ :where [?a :is ?b]]
+
+;; https://www.braveclojure.com/writing-macros/
+(defmacro defrule
+  "Generate new relation from exsiting facts and rules"
+  [vars where]
+  (let [q1 (make-query vars where)
+        q2 (list 'quote q1)
+        facts (gensym)
+        q3 (list 'd/q q2 facts)]
+    `(fn [~facts] ~q3)))
+
+(comment
+
+  (macroexpand '(defrule [?a ?b] [[?a :is ?b]]))
+  =>
+  (fn* ([G__10582] (d/q (quote [:find ?a ?b :in $ :where [?a :is ?b]]) G__10582)))
+
+  (let [rule (defrule [?a ?b] [[?a :is ?b]])
+        facts [[1 :is "odd"]
+               [2 :is "even"]]]
+    (rule facts))
   =>
   #{[1 "odd"] [2 "even"]})
 
