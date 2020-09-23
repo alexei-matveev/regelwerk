@@ -43,7 +43,12 @@
 
 (comment
   ;;
-  ;; Many possible syntaxes for rules ...
+  ;; Many possible syntaxes for rules. This is plain data:
+  ;;
+  {:vars '[?a ?b] :when '[[?a :is ?b]] :then '[[:a ?a :b ?b]]}
+  ;;
+  ;; With makros you may get rid of quoting, but likely have to decide
+  ;; for syntax ...
   ;;
   ;; vars when then
   ;; vars then when
