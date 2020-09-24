@@ -55,18 +55,23 @@
 ;; Macros [1] might  be the second best choice to  define rules if you
 ;; are going  to define them in  the source code.  The  best choice is
 ;; supposedly "data", because "data" =  "code", you've heard the story
-;; many times.  How  usefull can a makro  be if you need  to read your
+;; many times.  But, how usefull will  makros be when you need to read
 ;; rules at run time from a user-supplied file or URL?
 ;;
 ;; [1] https://www.braveclojure.com/writing-macros/
 ;;
 (defmacro defrule [vars where expr]
-  ;; This will be a funciton of the fact database:
+  ;; This will be a funciton of a fact database:
   `(fn [facts#]
-     ;; Compute the result set by querieng the facts:
+     ;; Compute the  result set by  querieng facts with  Datascript. A
+     ;; Datascript  DB can  be as  simple as  a collection  of tuples,
+     ;; mostly EAV-tuples.
      (let [rows# (d/q '[:find ~@vars :where ~@where] facts#)]
        ;; Generate another set of objects from the supplied expression
-       ;; binding each row of the result set to the variables:
+       ;; binding  each  row of  the  result  set  to variables  of  a
+       ;; vector. Clojure indeed allows binding  a vector of values to
+       ;; vector  of  symbols ---  a  special  case of  "destructuring
+       ;; bind", so it is called, I think.
        (into #{} (for [row# rows#]
                    (let [~vars row#] ~expr))))))
 
