@@ -62,9 +62,10 @@
 (defmacro defrule
   "Generate new relation from exsiting facts and rules"
   [vars where]
-  (let [q1 (make-query vars where)
+  (let [q (make-query vars where)
         facts (gensym)]
-    `(fn [~facts] (d/q (quote ~q1) ~facts))))
+    `(fn [~facts]
+       (d/q (quote ~q) ~facts))))
 
 (comment
 
