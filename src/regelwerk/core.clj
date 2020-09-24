@@ -53,8 +53,12 @@
 
 ;; https://www.braveclojure.com/writing-macros/
 (defmacro defrule [vars where expr]
+  ;; This will be a funciton of the fact database:
   `(fn [facts#]
+     ;; Compute the result set by querieng the facts:
      (let [rs# (d/q '[:find ~@vars :where ~@where] facts#)]
+       ;; Generate another set of objects from the supplied expression
+       ;; binding each row of the result set to the variables:
        (set
         (for [r# rs#]
           (let [~vars r#]
