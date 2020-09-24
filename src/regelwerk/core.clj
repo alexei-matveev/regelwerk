@@ -57,7 +57,7 @@
   [vars where]
   (let [facts (gensym)]
     `(fn [~facts]
-       (d/q (quote [:find ~@vars :where ~@where])
+       (d/q '[:find ~@vars :where ~@where]
             ~facts))))
 
 (comment
