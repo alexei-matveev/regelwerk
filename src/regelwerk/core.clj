@@ -65,13 +65,13 @@
   (let [q1 (make-query vars where)
         q2 (list 'quote q1)
         facts (gensym)]
-    `(fn [~facts] ~(list 'd/q q2 facts))))
+    `(fn [~facts] (d/q ~q2 ~facts))))
 
 (comment
 
   (macroexpand '(defrule [?a ?b] [[?a :is ?b]]))
   =>
-  (fn* ([G__10582] (d/q (quote [:find ?a ?b :in $ :where [?a :is ?b]]) G__10582)))
+  (fn* ([G__XXX] (datascript.core/q (quote [:find ?a ?b :in $ :where [?a :is ?b]]) G__XXX)))
 
   (let [rule (defrule [?a ?b] [[?a :is ?b]])
         facts [[1 :is "odd"]
