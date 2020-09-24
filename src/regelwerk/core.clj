@@ -52,28 +52,26 @@
   (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]]))
 
 ;; https://www.braveclojure.com/writing-macros/
-(defmacro defrule
-  "Generate new relation from exsiting facts and rules"
-  [vars where]
+(defmacro defrule [vars where expr]
   `(fn [facts#]
      (let [rs# (d/q '[:find ~@vars :where ~@where] facts#)]
        (set
         (for [r# rs#]
           (let [~vars r#]
-            ~vars))))))
+            ~expr))))))
 
 (comment
 
-  (macroexpand '(defrule [?a ?b] [[?a :is ?b]]))
+  (macroexpand '(defrule [?a ?b] [[?a :is ?b]] [?b ?a]))
   =>
   ...
 
-  (let [rule (defrule [?a ?b] [[?a :is ?b]])
+  (let [rule (defrule [?a ?b] [[?a :is ?b]] {:x ?a :y "is" :z ?b})
         facts [[1 :is "odd"]
                [2 :is "even"]]]
     (rule facts))
   =>
-  #{[1 "odd"] [2 "even"]})
+  #{{:x 1, :y "is", :z "odd"} {:x 2, :y "is", :z "even"}})
 
 (defn- parse [path]
   (edn/read (java.io.PushbackReader. (io/reader path))))
