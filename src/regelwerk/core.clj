@@ -56,13 +56,17 @@
   "Generate new relation from exsiting facts and rules"
   [vars where]
   `(fn [facts#]
-     (d/q '[:find ~@vars :where ~@where] facts#)))
+     (let [rs# (d/q '[:find ~@vars :where ~@where] facts#)]
+       (set
+        (for [r# rs#]
+          (let [~vars r#]
+            ~vars))))))
 
 (comment
 
   (macroexpand '(defrule [?a ?b] [[?a :is ?b]]))
   =>
-  (fn* ([facts__XXX] (datascript.core/q (quote [:find ?a ?b :where [?a :is ?b]]) facts__XXX)))
+  ...
 
   (let [rule (defrule [?a ?b] [[?a :is ?b]])
         facts [[1 :is "odd"]
