@@ -51,27 +51,20 @@
   (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
   (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]]))
 
-(defn- make-query [vars where]
-  (vec (concat [:find] vars '[:in $] [:where] where)))
-
-;; (make-query '[?a ?b] '[[?a :is ?b]])
-;; =>
-;; [:find ?a ?b :in $ :where [?a :is ?b]]
-
 ;; https://www.braveclojure.com/writing-macros/
 (defmacro defrule
   "Generate new relation from exsiting facts and rules"
   [vars where]
-  (let [q (make-query vars where)
-        facts (gensym)]
+  (let [facts (gensym)]
     `(fn [~facts]
-       (d/q (quote ~q) ~facts))))
+       (d/q (quote [:find ~@vars :where ~@where])
+            ~facts))))
 
 (comment
 
   (macroexpand '(defrule [?a ?b] [[?a :is ?b]]))
   =>
-  (fn* ([G__XXX] (datascript.core/q (quote [:find ?a ?b :in $ :where [?a :is ?b]]) G__XXX)))
+  (fn* ([G__XXX] (datascript.core/q (quote [:find ?a ?b :where [?a :is ?b]]) G__XXX)))
 
   (let [rule (defrule [?a ?b] [[?a :is ?b]])
         facts [[1 :is "odd"]
