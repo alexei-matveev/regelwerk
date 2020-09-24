@@ -59,10 +59,8 @@
      (let [rs# (d/q '[:find ~@vars :where ~@where] facts#)]
        ;; Generate another set of objects from the supplied expression
        ;; binding each row of the result set to the variables:
-       (set
-        (for [r# rs#]
-          (let [~vars r#]
-            ~expr))))))
+       (into #{} (for [r# rs#]
+                   (let [~vars r#] ~expr))))))
 
 (comment
 
