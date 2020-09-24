@@ -64,7 +64,7 @@
   [vars where]
   (let [q1 (make-query vars where)
         facts (gensym)]
-    `(fn [~facts] (d/q ~(list 'quote q1) ~facts))))
+    `(fn [~facts] (d/q (quote ~q1) ~facts))))
 
 (comment
 
