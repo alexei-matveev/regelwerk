@@ -51,7 +51,15 @@
   (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
   (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]]))
 
-;; https://www.braveclojure.com/writing-macros/
+;;
+;; Macros [1] might  be the second best choice to  define rules in you
+;; are going  to define them in  the source code.  The  best choice is
+;; supposedly "data", because "data" = "code", you've heard the strory
+;; many times.  How  usefull can a makro  be if you need  to read your
+;; rules at run time from a user-supplied file or URL?
+;;
+;; [1] https://www.braveclojure.com/writing-macros/
+;;
 (defmacro defrule [vars where expr]
   ;; This will be a funciton of the fact database:
   `(fn [facts#]
