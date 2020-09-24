@@ -63,9 +63,8 @@
   "Generate new relation from exsiting facts and rules"
   [vars where]
   (let [q1 (make-query vars where)
-        q2 (list 'quote q1)
         facts (gensym)]
-    `(fn [~facts] (d/q ~q2 ~facts))))
+    `(fn [~facts] (d/q ~(list 'quote q1) ~facts))))
 
 (comment
 
