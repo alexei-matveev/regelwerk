@@ -55,16 +55,14 @@
 (defmacro defrule
   "Generate new relation from exsiting facts and rules"
   [vars where]
-  (let [facts (gensym)]
-    `(fn [~facts]
-       (d/q '[:find ~@vars :where ~@where]
-            ~facts))))
+  `(fn [facts#]
+     (d/q '[:find ~@vars :where ~@where] facts#)))
 
 (comment
 
   (macroexpand '(defrule [?a ?b] [[?a :is ?b]]))
   =>
-  (fn* ([G__XXX] (datascript.core/q (quote [:find ?a ?b :where [?a :is ?b]]) G__XXX)))
+  (fn* ([facts__XXX] (datascript.core/q (quote [:find ?a ?b :where [?a :is ?b]]) facts__XXX)))
 
   (let [rule (defrule [?a ?b] [[?a :is ?b]])
         facts [[1 :is "odd"]
