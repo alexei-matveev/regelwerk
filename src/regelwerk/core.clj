@@ -1,6 +1,7 @@
 (ns regelwerk.core
   (:require [datascript.core :as d]
             [clojure.java.io :as io]
+            [clojure.string :as str]
             [clojure.edn :as edn]))
 
 ;; This is significantly slower than the compareable SQLite code. See
@@ -67,26 +68,31 @@
      ;; Datascript  DB can  be as  simple as  a collection  of tuples,
      ;; mostly EAV-tuples.
      (let [rows# (d/q '[:find ~@vars :where ~@where] facts#)]
-       ;; Generate another set of objects from the supplied expression
-       ;; binding  each  row of  the  result  set  to variables  of  a
-       ;; vector. Clojure indeed allows binding  a vector of values to
-       ;; vector  of  symbols ---  a  special  case of  "destructuring
-       ;; bind", so it is called, I think.
-       (into #{} (for [row# rows#]
-                   (let [~vars row#] ~expr))))))
+       ;; Generate another set of objects from the supplied collection
+       ;; valued  expression binding  each row  of the  result set  to
+       ;; variables  of a  vector.   Clojure indeed  allows binding  a
+       ;; vector of values to vector of  symbols --- a special case of
+       ;; "destructuring bind", so it is called, I think.
+       (into #{} cat
+             (for [row# rows#]
+               (let [~vars row#] ~expr))))))
 
 (comment
 
-  (macroexpand '(defrule [?a ?b] [[?a :is ?b]] [?b ?a]))
+  (macroexpand '(defrule [?a ?b] [[?a :is ?b]] [[?b ?a]]))
   =>
   ...
 
-  (let [rule (defrule [?a ?b] [[?a :is ?b]] {:x ?a :y "is" :z ?b})
+  (let [rule (defrule [?a ?b]
+               [[?a :is ?b]]
+               ;; =>
+               [[?b :x ?a]
+                [?a :y (str/upper-case ?b)]])
         facts [[1 :is "odd"]
                [2 :is "even"]]]
     (rule facts))
   =>
-  #{{:x 1, :y "is", :z "odd"} {:x 2, :y "is", :z "even"}})
+  #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})
 
 (defn- parse [path]
   (edn/read (java.io.PushbackReader. (io/reader path))))
