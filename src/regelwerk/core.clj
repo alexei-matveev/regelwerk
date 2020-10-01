@@ -104,9 +104,12 @@
 ;; expr).
 ;;
 (comment
-  (defrules
-    ([?a ?b] [[?a :is ?b]] [[?b :is ?a]])
-    ([?x ?y] [[?x :is ?t] [?t :is y]] [[?y :is x]])))
+  (define-rules
+    ([?a ?b]
+     . [?a :eq ?b] => [?b :eq ?a]
+     . [?a :le ?b] [?b :le ?a] => [?a :eq ?b])
+    ([?x ?y]
+     . [?x :eq ?t] [?t :eq ?y] => [?x :eq ?y])))
 
 ;; C-u C-x C-e if you want to see the expansion:
 (comment
