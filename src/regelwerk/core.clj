@@ -77,12 +77,11 @@
              (for [row# rows#]
                (let [~vars row#] ~expr))))))
 
+;; C-u C-x C-e if you want to see the expansion:
 (comment
+  (macroexpand '(defrule [?a ?b] [[?a :is ?b]] [[?b ?a]])))
 
-  (macroexpand '(defrule [?a ?b] [[?a :is ?b]] [[?b ?a]]))
-  =>
-  ...
-
+(defn- test-1 []
   (let [rule (defrule [?a ?b]
                [[?a :is ?b]]
                ;; =>
@@ -90,9 +89,10 @@
                 [?a :y (str/upper-case ?b)]])
         facts [[1 :is "odd"]
                [2 :is "even"]]]
-    (rule facts))
-  =>
-  #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})
+    (= (rule facts)
+       #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})))
+
+;; (test-1) => true
 
 (defn- parse [path]
   (edn/read (java.io.PushbackReader. (io/reader path))))
