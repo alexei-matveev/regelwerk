@@ -59,6 +59,10 @@
 ;; many times.  But, how usefull will  makros be when you need to read
 ;; rules at run time from a user-supplied file or URL?
 ;;
+;; Hm, on  the second thought you  only need a macro  to turn symbolic
+;; expressions  "expr"  int  a  fn/lambda of  arguments  "vars".   The
+;; Darascript query function takes find-query as plain data.
+;;
 ;; [1] https://www.braveclojure.com/writing-macros/
 ;;
 (defmacro defrule [vars where expr]
@@ -93,6 +97,44 @@
        #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})))
 
 ;; (test-1) => true
+
+;;
+;; It will rarely stay  by one rule. Do we need a  makro for that? The
+;; simplest  extension is  to accept  a list  of 3-tuples  (vars where
+;; expr).
+;;
+(comment
+  (defrules
+    ([?a ?b] [[?a :is ?b]] [[?b :is ?a]])
+    ([?x ?y] [[?x :is ?t] [?t :is y]] [[?y :is x]])))
+
+;; C-u C-x C-e if you want to see the expansion:
+(comment
+  (macroexpand '(defrules
+                  ([?a ?b] [[?a :is ?b]] [[?b ?a]])
+                  ([?x ?y] [[?y :is ?y]] [[?x ?y]]))))
+
+(defmacro defrules [& arities]
+  (let [fs (for [[vars where expr] arities]
+             `(fn [facts#]
+                (let [rows# (d/q '[:find ~@vars :where ~@where] facts#)]
+                  (into #{} cat
+                        (for [row# rows#]
+                          (let [~vars row#] ~expr))))))]
+    `(fn [facts#]
+       (into #{} cat (for [f# [~@fs]]
+                       (f# facts#))))))
+
+(defn- test-2 []
+  (let [rules (defrules
+                ([?a ?b] [[?a :is ?b]] [[?b ?a]])
+                ([?a ?b] [[?a :is ?b]] [[?a ?b]]))
+        facts [[1 :is "odd"]
+               [2 :is "even"]]]
+    (= (rules facts)
+       #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))
+
+;; (test-2) => true
 
 (defn- parse [path]
   (edn/read (java.io.PushbackReader. (io/reader path))))
