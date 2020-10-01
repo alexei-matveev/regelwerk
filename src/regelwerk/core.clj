@@ -65,7 +65,7 @@
 ;;
 ;; [1] https://www.braveclojure.com/writing-macros/
 ;;
-(defmacro defrule [vars where expr]
+(defn- sexp-rule [vars where expr]
   ;; This will be a funciton of a fact database:
   `(fn [facts#]
      ;; Compute the  result set by  querieng facts with  Datascript. A
@@ -80,6 +80,9 @@
        (into #{} cat
              (for [row# rows#]
                (let [~vars row#] ~expr))))))
+
+(defmacro defrule [vars where expr]
+  (sexp-rule vars where expr))
 
 ;; C-u C-x C-e if you want to see the expansion:
 (comment
@@ -119,11 +122,7 @@
 
 (defmacro defrules [& arities]
   (let [fs (for [[vars where expr] arities]
-             `(fn [facts#]
-                (let [rows# (d/q '[:find ~@vars :where ~@where] facts#)]
-                  (into #{} cat
-                        (for [row# rows#]
-                          (let [~vars row#] ~expr))))))]
+             (sexp-rule vars where expr))]
     `(fn [facts#]
        (into #{} cat (for [f# [~@fs]]
                        (f# facts#))))))
