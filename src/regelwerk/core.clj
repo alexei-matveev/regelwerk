@@ -132,6 +132,7 @@
        (into #{} cat (for [f# [~@fs]]
                        (f# facts#))))))
 
+;; (test-2) => true
 (defn- test-2 []
   (let [rules (defrules
                 ([?a ?b] [[?a :is ?b]] [[?b ?a]])
@@ -141,13 +142,33 @@
     (= (rules facts)
        #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))
 
-;; (test-2) => true
-
-;; Simulate reading rules at run time from some external source:
+;;
+;; Simulate reading rules  at run time from some  external source. The
+;; expression  part  will be  eval-ed,  so  that it  effectivel  alows
+;; calling arbitrary code --- a security nightmare in some scenarios.
+;;
+;; FIXME:  we  imported clojure.string  as  str  here. In  CIDER  that
+;; abbreviation  is understood.   With "lein  run" one  gets "No  such
+;; namespace: str". Hence fully qualified symbols here.
+;;
 (defn- read-rules []
   (quote
-   [([?a ?b] [[?a :is ?b]] [[?b ?a]])
-    ([?a ?b] [[?a :is ?b]] [[?a ?b]])]))
+   [([?a ?b] [[?a :is ?b]] [[?b :x ?a]
+                            [?a :y (clojure.string/upper-case ?b)]])
+    ([?a ?b] [[?a :is ?b]] [[:ab :glued (clojure.string/join "-" [?a ?b])]])
+    ;; Side effect are possibles, but do you really mean it?
+    ([?a ?b] [[?a :is ?b]] (println
+                            "nil expression is like an empty seq"))
+    ([?a ?b] [[?a :is ?b]] (println
+                            {:a ?a, :b ?b}))
+    ;; The  *ns*  dynvar  evaluates  to  clojure.core  when  run  from
+    ;; Leiningen  or a  Jar  file.  Only  in CIDER  it  happens to  be
+    ;; regelwerk.core, accidentally  this is  also when the  alias str
+    ;; for clojure.string happens to work.
+    ([?a ?b] [[?a :is ?b]] (do
+                             (println *ns*)
+                             (println "fire missles, at every match")
+                             [[:missles :were "fired"]]))]))
 
 ;; Read rules, splice them into the macro form and eval. This produces
 ;; "rules-as-a-function"  basically  in  the  same way  as  the  macro
@@ -157,14 +178,16 @@
         code `(defrules ~@arities)]
     (eval code)))
 
+;; (test-3) => true
 (defn- test-3 []
   (let [rules (make-rules)
         facts [[1 :is "odd"]
                [2 :is "even"]]]
     (= (rules facts)
-       #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))
-
-;; (test-3) => true
+       #{[:missles :were "fired"]
+         ["odd" :x 1] ["even" :x 2]
+         [1 :y "ODD"] [2 :y "EVEN"]
+         [:ab :glued "2-even"] [:ab :glued "1-odd"]})))
 
 ;;
 ;; This is something else entirely ...
@@ -179,7 +202,10 @@
     (d/q query db rules)))
 
 (defn -main [& args]
-  (println (apply main args)))
+  (println (test-1))
+  (println (test-2))
+  (println (test-3))
+  #_(println (apply main args)))
 
 ;; For your C-x C-e pleasure:
 (comment
