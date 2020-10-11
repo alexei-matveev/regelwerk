@@ -139,6 +139,32 @@
 
 ;; (test-2) => true
 
+;; Simulate reading rules at run time from some external source:
+(defn- read-rules []
+  (quote
+   [([?a ?b] [[?a :is ?b]] [[?b ?a]])
+    ([?a ?b] [[?a :is ?b]] [[?a ?b]])]))
+
+;; Read rules, splice them into the macro form and eval. This produces
+;; "rules-as-a-function"  basically  in  the  same way  as  the  macro
+;; "defrules", albeit at run time.
+(defn- make-rules []
+  (let [arities (read-rules)
+        code `(defrules ~@arities)]
+    (eval code)))
+
+(defn- test-3 []
+  (let [rules (make-rules)
+        facts [[1 :is "odd"]
+               [2 :is "even"]]]
+    (= (rules facts)
+       #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))
+
+;; (test-3) => true
+
+;;
+;; This is something else entirely ...
+;;
 (defn- parse [path]
   (edn/read (java.io.PushbackReader. (io/reader path))))
 
