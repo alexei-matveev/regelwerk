@@ -57,13 +57,14 @@
 ;; are going  to define them in  the source code.  The  best choice is
 ;; supposedly "data", because "data" =  "code", you've heard the story
 ;; many times.  But, how usefull will  makros be when you need to read
-;; rules at run time from a user-supplied file or URL?
+;; rules at run time from a user-supplied file or URL [2]?
 ;;
 ;; Hm, on  the second thought you  only need a macro  to turn symbolic
 ;; expressions  "expr"  int  a  fn/lambda of  arguments  "vars".   The
 ;; Darascript query function takes find-query as plain data.
 ;;
 ;; [1] https://www.braveclojure.com/writing-macros/
+;; [2] https://www.braveclojure.com/read-and-eval/
 ;;
 (defn- sexp-rule [vars where expr]
   ;; This will be a funciton of a fact database:
