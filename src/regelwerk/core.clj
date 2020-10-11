@@ -53,15 +53,18 @@
   (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]]))
 
 ;;
-;; Macros [1] might  be the second best choice to  define rules if you
-;; are going  to define them in  the source code.  The  best choice is
-;; supposedly "data", because "data" =  "code", you've heard the story
-;; many times.  But, how usefull will  makros be when you need to read
-;; rules at run time from a user-supplied file or URL [2]?
+;; Macros  [1]  might be  the  second  best  choice to  define  rules,
+;; especially if you define them in  the source code.  The best choice
+;; is supposedly  "data", because  "data" =  "code", you've  heard the
+;; story many times.  But, how usefull will makros be when you need to
+;; read rules  at run time  from a  user-supplied file or  URL?  Well,
+;; Clojure  "eval" does  macro  expansion as  expected  [2], see  also
+;; below. At that point it is not very far from reading data, building
+;; and evaluating the code with plain old functions.
 ;;
-;; Hm, on  the second thought you  only need a macro  to turn symbolic
-;; expressions  "expr"  int  a  fn/lambda of  arguments  "vars".   The
-;; Darascript query function takes find-query as plain data.
+;; FWIW, the  Datascript query  is already  plain data.   You actually
+;; only  need a  macro  to  turn symbolic  expressions  "expr" into  a
+;; function of arguments "vars".
 ;;
 ;; [1] https://www.braveclojure.com/writing-macros/
 ;; [2] https://www.braveclojure.com/read-and-eval/
