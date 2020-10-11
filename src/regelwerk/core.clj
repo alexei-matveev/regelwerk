@@ -2,7 +2,8 @@
   (:require [datascript.core :as d]
             [clojure.java.io :as io]
             [clojure.string :as str]
-            [clojure.edn :as edn]))
+            [clojure.edn :as edn])
+  (:gen-class))
 
 ;; This is significantly slower than the compareable SQLite code. See
 ;; also
