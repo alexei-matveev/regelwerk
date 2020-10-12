@@ -1,3 +1,20 @@
+;;
+;; Macros  [1]  might be  the  second  best  choice to  define  rules,
+;; especially if you define them in  the source code.  The best choice
+;; is supposedly  "data", because  "data" =  "code", you've  heard the
+;; story many times.  But, how usefull will makros be when you need to
+;; read rules  at run time  from a  user-supplied file or  URL?  Well,
+;; Clojure  "eval" does  macro  expansion as  expected  [2], see  also
+;; below. At that point it is not very far from reading data, building
+;; and evaluating the code with plain old functions.
+;;
+;; FWIW, the  Datascript query  is already  plain data.   You actually
+;; only  need a  macro  to  turn symbolic  expressions  "expr" into  a
+;; function of arguments "vars".
+;;
+;; [1] https://www.braveclojure.com/writing-macros/
+;; [2] https://www.braveclojure.com/read-and-eval/
+;;
 (ns regelwerk.core
   (:require [datascript.core :as d]
             [clojure.java.io :as io]
@@ -30,23 +47,7 @@
   (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
   (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]]))
 
-;;
-;; Macros  [1]  might be  the  second  best  choice to  define  rules,
-;; especially if you define them in  the source code.  The best choice
-;; is supposedly  "data", because  "data" =  "code", you've  heard the
-;; story many times.  But, how usefull will makros be when you need to
-;; read rules  at run time  from a  user-supplied file or  URL?  Well,
-;; Clojure  "eval" does  macro  expansion as  expected  [2], see  also
-;; below. At that point it is not very far from reading data, building
-;; and evaluating the code with plain old functions.
-;;
-;; FWIW, the  Datascript query  is already  plain data.   You actually
-;; only  need a  macro  to  turn symbolic  expressions  "expr" into  a
-;; function of arguments "vars".
-;;
-;; [1] https://www.braveclojure.com/writing-macros/
-;; [2] https://www.braveclojure.com/read-and-eval/
-;;
+;; This will redurn the *code* for rule as function of facts:
 (defn- sexp-rule [vars where expr]
   ;; This will be a funciton of a fact database:
   `(fn [facts#]
