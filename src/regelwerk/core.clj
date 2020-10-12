@@ -170,6 +170,10 @@
                              (println "fire missles, at every match")
                              [[:missles :were "fired"]]))]))
 
+;;
+;; This should read all objects from  the file with edn data. Not just
+;; the fist one that is returned bei clojure.edn/read ...
+;;
 (defn- read-seq [stream]
   ;; This unique sentinel object will be returned on EOF bei edn/read:
   (let [eof (Object.)]

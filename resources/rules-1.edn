@@ -5,3 +5,6 @@
                         [?a :ge ?b]])
 ([?a ?b] [[?b :is ?a]] [[?a :le ?b]
                         [?a :ge ?b]])
+;; A (comment  ...) form ist read  literally and is not  understood by
+;; the defrules-macro. The reader comment works as expected though:
+#_(comment "Hi!")
