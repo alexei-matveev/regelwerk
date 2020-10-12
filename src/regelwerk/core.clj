@@ -164,7 +164,7 @@
 ;; Really   read  them,   still  from   the  resource   file  in   the
 ;; Jar.
 (defn- read-rules []
-  (-> "rules-1.edn"
+  (-> "rules.edn"
       (io/resource)
       (io/reader)
       (java.io.PushbackReader.)
