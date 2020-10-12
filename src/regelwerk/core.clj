@@ -5,29 +5,6 @@
             [clojure.edn :as edn])
   (:gen-class))
 
-;; This is significantly slower than the compareable SQLite code. See
-;; also
-;; https://stackoverflow.com/questions/42457136/recursive-datalog-queries-for-datomic-really-slow
-(defn- unused-example [n]
-  (let [rules '[[(follows ?a ?b)
-                 [?a ?b]]
-                [(follows ?a ?b)
-                 [?x ?b]
-                 (follows ?a ?x)]]
-        query '[:find ?a ?b
-                :in $ %
-                :where
-                (follows ?a ?b)]
-        ;; Looks like ([0 1] [1 2] [2 3]) for n = 3:
-        db (for [i (range n)]
-               [i (inc i)])]
-    (d/q query db rules)))
-
-(comment
-  (unused-example 3)
-  =>
-  #{[2 3] [1 3] [0 3] [0 2] [1 2] [0 1]})
-
 (comment
   ;;
   ;; Many possible syntaxes for rules. This is plain data:
@@ -218,26 +195,7 @@
          ["one" :ge 1] [1 :ge "one"]
          [2 :le "two"] ["two" :le 2]})))
 
-;;
-;; This is something else entirely ...
-;;
-(defn- parse [path]
-  (edn/read (java.io.PushbackReader. (io/reader path))))
-
-(defn- main [db-file rules-file query-file]
-  (let [db (parse db-file)
-        rules (parse rules-file)
-        query (parse query-file)]
-    (d/q query db rules)))
-
 (defn -main [& args]
   (println (test-1))
   (println (test-2))
-  (println (test-3))
-  #_(println (apply main args)))
-
-;; For your C-x C-e pleasure:
-(comment
-  (main "resources/db.edn"
-        "resources/rules.edn"
-        "resources/query.edn"))
+  (println (test-3)))

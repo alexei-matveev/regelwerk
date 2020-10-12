@@ -1,6 +1,0 @@
-;; Query
-[:find ?a ?b
- :in $ %
- :where
- (lt ?a ?b)]
-
