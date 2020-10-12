@@ -1,11 +1,11 @@
 # Simulate Rule-Engine with Datalog
 
+To keep thing simple and see where  it leads us we postulate here that
+a  rule or  a rule  set  is just  a  function of  facts producing  new
+facts. No more, no less.
+
 See [Datascript](https://github.com/tonsky/datascript) dialect of
 Datalog.
-
-Usage:
-
-    $ lein run resources/db.edn resources/rules.edn resources/query.edn
 
 ## Links
 
