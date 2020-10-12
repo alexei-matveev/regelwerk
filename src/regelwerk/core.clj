@@ -170,6 +170,16 @@
                              (println "fire missles, at every match")
                              [[:missles :were "fired"]]))]))
 
+(defn- read-seq [stream]
+  ;; This unique sentinel object will be returned on EOF bei edn/read:
+  (let [eof (Object.)]
+    (letfn [(parse [stream]
+              (lazy-seq
+               (cons (edn/read {:eof eof} stream)
+                     (parse stream))))]
+      ;; EOF itself is however not part of the sequence:
+      (take-while #(not= eof %) (parse stream)))))
+
 ;; Really   read  them,   still  from   the  resource   file  in   the
 ;; Jar.
 (defn- read-rules []
@@ -177,7 +187,7 @@
       (io/resource)
       (io/reader)
       (java.io.PushbackReader.)
-      (edn/read)))
+      (read-seq)))
 
 (comment
   (read-rules)
