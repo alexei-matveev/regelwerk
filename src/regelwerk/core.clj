@@ -9,10 +9,10 @@
   ;;
   ;; Many possible syntaxes for rules. This is plain data:
   ;;
-  {:vars '[?a ?b] :when '[[?a :is ?b]] :then '[[:a ?a :b ?b]]}
+  (quote
+   {:vars [?a ?b] :when [[?a :is ?b]] :then [[:a ?a :b ?b]]})
   ;;
-  ;; With makros you may get rid of quoting, but likely have to decide
-  ;; for syntax ...
+  ;; There is only six permutations:
   ;;
   ;; vars when then
   ;; vars then when
