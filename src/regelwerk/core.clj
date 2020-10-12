@@ -151,7 +151,7 @@
 ;; abbreviation  is understood.   With "lein  run" one  gets "No  such
 ;; namespace: str". Hence fully qualified symbols here.
 ;;
-(defn- read-rules []
+(defn- demo-rules []
   (quote
    [([?a ?b] [[?a :is ?b]] [[?b :x ?a]
                             [?a :y (clojure.string/upper-case ?b)]])
@@ -170,6 +170,21 @@
                              (println "fire missles, at every match")
                              [[:missles :were "fired"]]))]))
 
+;; Really   read  them,   still  from   the  resource   file  in   the
+;; Jar.
+(defn- read-rules []
+  (-> "rules-1.edn"
+      (io/resource)
+      (io/reader)
+      (java.io.PushbackReader.)
+      (edn/read)))
+
+(comment
+  (read-rules)
+  =>
+  (([?a ?b] [[?a :is ?b]] [[?a :le ?b] [?a :ge ?b]])
+   ([?a ?b] [[?b :is ?a]] [[?a :le ?b] [?a :ge ?b]])))
+
 ;; Read rules, splice them into the macro form and eval. This produces
 ;; "rules-as-a-function"  basically  in  the  same way  as  the  macro
 ;; "defrules", albeit at run time.
@@ -181,13 +196,13 @@
 ;; (test-3) => true
 (defn- test-3 []
   (let [rules (make-rules)
-        facts [[1 :is "odd"]
-               [2 :is "even"]]]
+        facts [[1 :is "one"]
+               [2 :is "two"]]]
     (= (rules facts)
-       #{[:missles :were "fired"]
-         ["odd" :x 1] ["even" :x 2]
-         [1 :y "ODD"] [2 :y "EVEN"]
-         [:ab :glued "2-even"] [:ab :glued "1-odd"]})))
+       #{["two" :ge 2] [2 :ge "two"]
+         [1 :le "one"] ["one" :le 1]
+         ["one" :ge 1] [1 :ge "one"]
+         [2 :le "two"] ["two" :le 2]})))
 
 ;;
 ;; This is something else entirely ...

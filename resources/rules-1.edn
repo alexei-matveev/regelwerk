@@ -1,0 +1,5 @@
+;; Do we really need to put all arities in a single list?
+(([?a ?b] [[?a :is ?b]] [[?a :le ?b]
+                         [?a :ge ?b]])
+ ([?a ?b] [[?b :is ?a]] [[?a :le ?b]
+                         [?a :ge ?b]]))
