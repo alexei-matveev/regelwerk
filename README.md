@@ -1,14 +1,15 @@
-# Simulate Rule-Engine with Datalog
+# Trying Macros for Rules
 
-To keep thing simple and see where  it leads us we postulate here that
-a  rule or  a rule  set  is just  a  function of  facts producing  new
+To keep thing simple and see where it leads us we postulate here that
+a rule or a rule set is just a function of facts producing new
 facts. No more, no less.
-
-See [Datascript](https://github.com/tonsky/datascript) dialect of
-Datalog.
 
 ## Links
 
+* Maybe one shlould read [PAIP](https://github.com/norvig/paip-lisp)
+  before even attempting ...
+* See [Datascript](https://github.com/tonsky/datascript) dialect of
+ Datalog.
 * [Souffle](https://souffle-lang.github.io/simple) Lang uses plain
   *.facts for input- and output relations.
 * [Formulog](https://github.com/HarvardPL/formulog) delivers an
