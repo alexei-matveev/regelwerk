@@ -24,19 +24,28 @@
 
 (comment
   ;;
-  ;; Many possible syntaxes for rules. This is plain data:
+  ;; Many  possible  syntaxes  for  rules.  FIXME:  Maybe  one  should
+  ;; postulate  that a  "rule  without  body is  a  fact"? This  could
+  ;; constrain the search favor the "head first" syntax as in Prolog:
+  ;;
+  ;;      Fact.
+  ;;      Head (Vars) <- Body (Vars).
+  ;;
+  ;; Rules could be plain data. Here "then" = "head", "when" = "body":
   ;;
   (quote
-   {:vars [?a ?b] :when [[?a :is ?b]] :then [[:a ?a :b ?b]]})
+   {:then [["water" :is "wet"]]}
+   {:vars [?a ?b] :when [[?a :is ?b]] :then [[?a :is :object]
+                                             [?b :is :adjective]]})
   ;;
-  ;; There is only six permutations:
+  ;; There is only six permutations
   ;;
-  ;; vars when then
-  ;; vars then when
-  ;; when then vars
-  ;; when vars then
-  ;; then vars when
-  ;; then when vars
+  ;;     vars when then
+  ;;     vars then when
+  ;;     when then vars
+  ;;     when vars then
+  ;;     then vars when
+  ;;     then when vars
   ;;
   (defrule [?a ?b]
     [[?a :is ?b]] => [[:a ?a :b ?b]])
