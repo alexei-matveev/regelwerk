@@ -99,16 +99,31 @@
 ;;
 ;; It will rarely stay  by one rule. Do we need a  macro for that? The
 ;; simplest  extension is  to accept  a list  of 3-tuples  (vars where
-;; expr). This could be one of the future syntaxes.
+;; expr). This  could be  one of  the future syntaxes  -- if  you dont
+;; enclose head  and body into  extra praens  [] you need  a separator
+;; like :- or <- between them:
 ;;
 (comment
+  (define-rule [?x ?y]
+    [?x :eq ?y] <- [?x :eq ?t] [?t :eq ?y])
+
+  (define-rule [?x ?y]
+    [?x :eq ?y] [?y :eq ?x] <- [?x :eq ?t] [?t :eq ?y])
+
+  (define-rule []
+    [1 :eq "one"]
+    ["two" :eq 2])
+
   (define-rules
     ([?a ?b]
-     ([?b :eq ?a] :- [?a :eq ?b])
+     ([?b :eq ?a] <- [?a :eq ?b])
+
      ;; Two facts in the head:
-     ([?a :eq ?b] [?b :eq ?a] :- [?a :le ?b] [?b :le ?a]))
+     ([?a :eq ?b] [?b :eq ?a] <- [?a :le ?b] [?b :le ?a]))
+
     ([?x ?y]
-     ([?x :eq ?y] :- [?x :eq ?t] [?t :eq ?y]))
+     ([?x :eq ?y] <- [?x :eq ?t] [?t :eq ?y]))
+
     ;; This is how a "rule without body" aka "facts" look like:
     ([]
      ([1 :eq "one"]
