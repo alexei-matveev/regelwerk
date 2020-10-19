@@ -2,7 +2,7 @@
 ;; Macros  [1]  might be  the  second  best  choice to  define  rules,
 ;; especially if you define them in  the source code.  The best choice
 ;; is supposedly  "data", because  "data" =  "code", you've  heard the
-;; story many times.  But, how usefull will makros be when you need to
+;; story many times.  But, how usefull will macros be when you need to
 ;; read rules  at run time  from a  user-supplied file or  URL?  Well,
 ;; Clojure  "eval" does  macro  expansion as  expected  [2], see  also
 ;; below. At that point it is not very far from reading data, building
@@ -58,8 +58,8 @@
   (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
   (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]]))
 
-;; This will return  the *code* for rule as function  of facts. People
-;; used to call it compilaiton, that is why the name:
+;; This  will  return   the  *code*  for  the  rule   as  function  of
+;; facts. People tend to call it compilaiton, that is why the name:
 (defn- compile-rule [vars expr where]
   ;; This will be a funciton of a fact database:
   `(fn [facts#]
