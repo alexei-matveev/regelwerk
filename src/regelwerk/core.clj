@@ -25,8 +25,10 @@
 (comment
   ;;
   ;; Many  possible  syntaxes  for  rules.  FIXME:  Maybe  one  should
-  ;; postulate  that a  "rule  without  body is  a  fact"? This  could
-  ;; constrain the search favor the "head first" syntax as in Prolog:
+  ;; postulate that a "rule without body  is a fact"?  "A fact is true
+  ;; no matter what", like PAIP  says. This could constrain the search
+  ;; the "most  parctical" syntax  by e.g.  favoring the  "head first"
+  ;; syntax as in Prolog:
   ;;
   ;;      Fact.
   ;;      Head (Vars) <- Body (Vars).
