@@ -58,8 +58,9 @@
   (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
   (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]]))
 
-;; This will redurn the *code* for rule as function of facts:
-(defn- sexp-rule [vars where expr]
+;; This will return  the *code* for rule as function  of facts. People
+;; used to call it compilaiton, that is why the name:
+(defn- compile-rule [vars where expr]
   ;; This will be a funciton of a fact database:
   `(fn [facts#]
      ;; Compute the  result set by  querieng facts with  Datascript. A
@@ -76,7 +77,7 @@
                (let [~vars row#] ~expr))))))
 
 (defmacro defrule [vars where expr]
-  (sexp-rule vars where expr))
+  (compile-rule vars where expr))
 
 ;; C-u C-x C-e if you want to see the expansion:
 (comment
@@ -116,7 +117,7 @@
 
 (defmacro defrules [& arities]
   (let [fs (for [[vars where expr] arities]
-             (sexp-rule vars where expr))]
+             (compile-rule vars where expr))]
     `(fn [facts#]
        (into #{} cat (for [f# [~@fs]]
                        (f# facts#))))))
