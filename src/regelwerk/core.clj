@@ -42,8 +42,8 @@
   ;;
   ;; There is only six permutations
   ;;
+  ;;     vars then when <- current
   ;;     vars when then
-  ;;     vars then when
   ;;     when then vars
   ;;     when vars then
   ;;     then vars when
@@ -60,7 +60,7 @@
 
 ;; This will return  the *code* for rule as function  of facts. People
 ;; used to call it compilaiton, that is why the name:
-(defn- compile-rule [vars where expr]
+(defn- compile-rule [vars expr where]
   ;; This will be a funciton of a fact database:
   `(fn [facts#]
      ;; Compute the  result set by  querieng facts with  Datascript. A
@@ -76,30 +76,29 @@
              (for [row# rows#]
                (let [~vars row#] ~expr))))))
 
-(defmacro defrule [vars where expr]
-  (compile-rule vars where expr))
+(defmacro defrule [vars expr where]
+  (compile-rule vars expr where))
 
 ;; C-u C-x C-e if you want to see the expansion:
 (comment
-  (macroexpand '(defrule [?a ?b] [[?a :is ?b]] [[?b ?a]])))
+  (macroexpand '(defrule [?a ?b] [[?b ?a]] [[?a :is ?b]])))
 
+;; (test-1) => true
 (defn- test-1 []
   (let [rule (defrule [?a ?b]
-               [[?a :is ?b]]
-               ;; =>
                [[?b :x ?a]
-                [?a :y (str/upper-case ?b)]])
+                [?a :y (str/upper-case ?b)]]
+               ;; <-
+               [[?a :is ?b]])
         facts [[1 :is "odd"]
                [2 :is "even"]]]
     (= (rule facts)
        #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})))
 
-;; (test-1) => true
-
 ;;
 ;; It will rarely stay  by one rule. Do we need a  macro for that? The
-;; simplest  extension is  to accept  a list  of 3-tuples  (vars where
-;; expr). This  could be  one of  the future syntaxes  -- if  you dont
+;; simplest  extension is  to accept  a  list of  3-tuples (vars  head
+;; body).  This could  be one of the possible syntaxes  -- if you dont
 ;; enclose head  and body into  extra praens  [] you need  a separator
 ;; like :- or <- between them:
 ;;
@@ -132,12 +131,12 @@
 ;; C-u C-x C-e if you want to see the expansion:
 (comment
   (macroexpand '(defrules
-                  ([?a ?b] [[?a :is ?b]] [[?b ?a]])
-                  ([?x ?y] [[?y :is ?y]] [[?x ?y]]))))
+                  ([?a ?b] [[?b ?a]] [[?a :is ?b]])
+                  ([?x ?y] [[?x ?y]] [[?y :is ?y]]))))
 
 (defmacro defrules [& arities]
-  (let [fs (for [[vars where expr] arities]
-             (compile-rule vars where expr))]
+  (let [fs (for [[vars expr where] arities]
+             (compile-rule vars expr where))]
     `(fn [facts#]
        (into #{} cat (for [f# [~@fs]]
                        (f# facts#))))))
@@ -145,8 +144,8 @@
 ;; (test-2) => true
 (defn- test-2 []
   (let [rules (defrules
-                ([?a ?b] [[?a :is ?b]] [[?b ?a]])
-                ([?a ?b] [[?a :is ?b]] [[?a ?b]]))
+                ([?a ?b] [[?b ?a]] [[?a :is ?b]])
+                ([?a ?b] [[?a ?b]] [[?a :is ?b]]))
         facts [[1 :is "odd"]
                [2 :is "even"]]]
     (= (rules facts)
@@ -163,22 +162,32 @@
 ;;
 (defn- demo-rules []
   (quote
-   [([?a ?b] [[?a :is ?b]] [[?b :x ?a]
-                            [?a :y (clojure.string/upper-case ?b)]])
-    ([?a ?b] [[?a :is ?b]] [[:ab :glued (clojure.string/join "-" [?a ?b])]])
+   [([?a ?b]
+     [[?b :x ?a]
+      [?a :y (clojure.string/upper-case ?b)]]
+     ;; when:
+     [[?a :is ?b]])
+    ([?a ?b] [[:ab :glued (clojure.string/join "-" [?a ?b])]] [[?a :is ?b]])
     ;; Side effect are possibles, but do you really mean it?
-    ([?a ?b] [[?a :is ?b]] (println
-                            "nil expression is like an empty seq"))
-    ([?a ?b] [[?a :is ?b]] (println
-                            {:a ?a, :b ?b}))
+    ([?a ?b]
+     (println "nil expression is like an empty seq")
+     ;; when
+     [[?a :is ?b]])
+    ([?a ?b]
+     (println {:a ?a, :b ?b})
+     ;; when
+     [[?a :is ?b]])
     ;; The  *ns*  dynvar  evaluates  to  clojure.core  when  run  from
     ;; Leiningen  or a  Jar  file.  Only  in CIDER  it  happens to  be
     ;; regelwerk.core, accidentally  this is  also when the  alias str
     ;; for clojure.string happens to work.
-    ([?a ?b] [[?a :is ?b]] (do
-                             (println *ns*)
-                             (println "fire missles, at every match")
-                             [[:missles :were "fired"]]))]))
+    ([?a ?b]
+     (do
+       (println *ns*)
+       (println "fire missles, at every match")
+       [[:missles :were "fired"]])
+     ;; when
+     [[?a :is ?b]])]))
 
 ;;
 ;; This should read all objects from  the file with edn data. Not just
@@ -204,10 +213,9 @@
       (read-seq)))
 
 (comment
-  (read-rules)
-  =>
-  (([?a ?b] [[?a :is ?b]] [[?a :le ?b] [?a :ge ?b]])
-   ([?a ?b] [[?b :is ?a]] [[?a :le ?b] [?a :ge ?b]])))
+  (= (read-rules)
+     '(([?a ?b] [[?a :le ?b] [?a :ge ?b]] [[?a :is ?b]])
+       ([?a ?b] [[?a :le ?b] [?a :ge ?b]] [[?b :is ?a]]))))
 
 ;; Read rules, splice them into the macro form and eval. This produces
 ;; "rules-as-a-function"  basically  in  the  same way  as  the  macro

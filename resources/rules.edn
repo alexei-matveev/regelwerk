@@ -1,10 +1,16 @@
 ;; Do we really need to put all  arities in a single list? No we dont!
 ;; The reader is supposed to read  all objects from the file an return
 ;; a sequence.
-([?a ?b] [[?a :is ?b]] [[?a :le ?b]
-                        [?a :ge ?b]])
-([?a ?b] [[?b :is ?a]] [[?a :le ?b]
-                        [?a :ge ?b]])
+([?a ?b]
+ [[?a :le ?b]
+  [?a :ge ?b]]
+ ;; when
+ [[?a :is ?b]])
+([?a ?b]
+ [[?a :le ?b]
+  [?a :ge ?b]]
+ ;; when
+ [[?b :is ?a]])
 ;; A (comment  ...) form ist read  literally and is not  understood by
 ;; the defrules-macro. The reader comment works as expected though:
 #_(comment "Hi!")
