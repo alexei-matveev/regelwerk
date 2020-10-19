@@ -115,18 +115,17 @@
 
   (define-rules
     ([?a ?b]
-     ([?b :eq ?a] <- [?a :eq ?b])
+     [?b :eq ?a] <- [?a :eq ?b])
 
-     ;; Two facts in the head:
-     ([?a :eq ?b] [?b :eq ?a] <- [?a :le ?b] [?b :le ?a]))
+    ;; Two facts in the head:
+    ([?a ?b]
+     [?a :eq ?b] [?b :eq ?a] <- [?a :le ?b] [?b :le ?a])
 
-    ([?x ?y]
-     ([?x :eq ?y] <- [?x :eq ?t] [?t :eq ?y]))
-
-    ;; This is how a "rule without body" aka "facts" look like:
+    ;; This  is how  a  "rule  without body"  aka  "facts" could  look
+    ;; like. Is it worth it?
     ([]
-     ([1 :eq "one"]
-      [2 :eq "two"]))))
+     [1 :eq "one"]
+     [2 :eq "two"])))
 
 ;; C-u C-x C-e if you want to see the expansion:
 (comment
