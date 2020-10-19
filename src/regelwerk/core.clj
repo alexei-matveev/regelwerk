@@ -97,17 +97,22 @@
 ;; (test-1) => true
 
 ;;
-;; It will rarely stay  by one rule. Do we need a  makro for that? The
+;; It will rarely stay  by one rule. Do we need a  macro for that? The
 ;; simplest  extension is  to accept  a list  of 3-tuples  (vars where
-;; expr).
+;; expr). This could be one of the future syntaxes.
 ;;
 (comment
   (define-rules
     ([?a ?b]
-     ([?a :eq ?b] => [?b :eq ?a])
-     ([?a :le ?b] [?b :le ?a] => [?a :eq ?b]))
+     ([?b :eq ?a] :- [?a :eq ?b])
+     ;; Two facts in the head:
+     ([?a :eq ?b] [?b :eq ?a] :- [?a :le ?b] [?b :le ?a]))
     ([?x ?y]
-     ([?x :eq ?t] [?t :eq ?y] => [?x :eq ?y]))))
+     ([?x :eq ?y] :- [?x :eq ?t] [?t :eq ?y]))
+    ;; This is how a "rule without body" aka "facts" look like:
+    ([]
+     ([1 :eq "one"]
+      [2 :eq "two"]))))
 
 ;; C-u C-x C-e if you want to see the expansion:
 (comment
