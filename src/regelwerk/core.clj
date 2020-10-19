@@ -95,6 +95,20 @@
     (= (rule facts)
        #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})))
 
+;; (test-1a) => true
+(defn- test-1a []
+  (let [f (fn [a b]
+            [[b :x a]
+             [a :y (str/upper-case b)]])
+        rule (defrule [?a ?b]
+               (f ?a ?b)
+               ;; <-
+               [[?a :is ?b]])
+        facts [[1 :is "odd"]
+               [2 :is "even"]]]
+    (= (rule facts)
+       #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})))
+
 ;;
 ;; It will rarely stay  by one rule. Do we need a  macro for that? The
 ;; simplest  extension is  to accept  a  list of  3-tuples (vars  head
@@ -237,5 +251,6 @@
 
 (defn -main [& args]
   (println (test-1))
+  (println (test-1a))
   (println (test-2))
   (println (test-3)))
