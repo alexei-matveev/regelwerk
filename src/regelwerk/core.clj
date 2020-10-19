@@ -22,33 +22,32 @@
             [clojure.edn :as edn])
   (:gen-class))
 
+;;
+;; Many  possible  syntaxes  for   rules.   FIXME:  Maybe  one  should
+;; postulate that a "rule without body is a fact"?  "A fact is true no
+;; matter what", like  PAIP says. This could constrain  the search the
+;; "most parctical" syntax  by e.g.  favoring the  "head first" syntax
+;; as in Prolog:
+;;
+;;      Fact.
+;;      Head (Vars) <- Body (Vars).
+;;
+;; Rules could be plain data.  There is only six permutations.
+;;
+;;     vars head body <- current
+;;     vars body head <- does not reduce to fact with empty body?
+;;     body head vars
+;;     body vars head
+;;     head vars body
+;;     head body vars
+;;
+;; It may help to think of "body" = "when" & "head" = "then".
+;;
 (comment
-  ;;
-  ;; Many  possible  syntaxes  for  rules.  FIXME:  Maybe  one  should
-  ;; postulate that a "rule without body  is a fact"?  "A fact is true
-  ;; no matter what", like PAIP  says. This could constrain the search
-  ;; the "most  parctical" syntax  by e.g.  favoring the  "head first"
-  ;; syntax as in Prolog:
-  ;;
-  ;;      Fact.
-  ;;      Head (Vars) <- Body (Vars).
-  ;;
-  ;; Rules could be plain data. Here "then" = "head", "when" = "body":
-  ;;
   (quote
    {:then [["water" :is "wet"]]}
    {:vars [?a ?b] :when [[?a :is ?b]] :then [[?a :is :object]
                                              [?b :is :adjective]]})
-  ;;
-  ;; There is only six permutations
-  ;;
-  ;;     vars then when <- current
-  ;;     vars when then
-  ;;     when then vars
-  ;;     when vars then
-  ;;     then vars when
-  ;;     then when vars
-  ;;
   (defrule [?a ?b]
     [[?a :is ?b]] => [[:a ?a :b ?b]])
   (defrule named-rule [?a ?b]
