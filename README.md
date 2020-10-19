@@ -9,7 +9,9 @@ facts. No more, no less.
 * Maybe one shlould read [PAIP](https://github.com/norvig/paip-lisp)
   before even attempting ...
 * See [Datascript](https://github.com/tonsky/datascript) dialect of
- Datalog.
+  Datalog.
+* [naga](https://github.com/quoll/naga) seems to be generating facts
+  from rules.
 * [Souffle](https://souffle-lang.github.io/simple) Lang uses plain
   *.facts for input- and output relations.
 * [Formulog](https://github.com/HarvardPL/formulog) delivers an
