@@ -232,17 +232,17 @@
        (read-rules "resources/rules.edn")
        (read-rules (io/resource "rules.edn")))))
 
-;; Read rules, splice them into the macro form and eval. This produces
-;; "rules-as-a-function"  basically  in  the  same way  as  the  macro
-;; "defrules", albeit at run time.
-(defn- make-rules [source]
+;; Read and eval rules, splice them into the macro form and eval. This
+;; produces  "rules-as-a-function" basically  in the  same way  as the
+;; macro "defrules", albeit at run time.
+(defn- load-rules [source]
   (let [arities (read-rules source)
         code `(defrules ~@arities)]
     (eval code)))
 
 ;; (test-3) => true
 (defn- test-3 []
-  (let [rules (make-rules (io/resource "rules.edn"))
+  (let [rules (load-rules (io/resource "rules.edn"))
         facts [[1 :is "one"]
                [2 :is "two"]]]
     (= (rules facts)
