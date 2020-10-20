@@ -260,7 +260,8 @@
   ;; any EDN in full:
   (let [facts (read-rules facts-path)
         rules (load-rules rules-path)]
-    (println (rules facts))))
+    (println (rules facts))
+    (println (rules (rules facts)))))
 
 (defn -main [& args]
   ;; Because I am too lazy to type it every time.
