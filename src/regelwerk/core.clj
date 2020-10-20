@@ -215,31 +215,34 @@
       ;; EOF itself is however not part of the sequence:
       (take-while #(not= eof %) (parse stream)))))
 
-;; Really   read  them,   still  from   the  resource   file  in   the
-;; Jar.
-(defn- read-rules []
-  (-> "rules.edn"
-      (io/resource)
+;; Read the  rules, from  a file or  a resource in  the JAR  -- supply
+;; either  a  path  like  "resources/rules.edn"  or  a  resource  like
+;; (io/resource "rules.edn"):
+(defn- read-rules [source]
+  (-> source
       (io/reader)
       (java.io.PushbackReader.)
       (read-seq)))
 
 (comment
-  (= (read-rules)
-     '(([?a ?b] [[?a :le ?b] [?a :ge ?b]] [[?a :is ?b]])
-       ([?a ?b] [[?a :le ?b] [?a :ge ?b]] [[?b :is ?a]]))))
+  (let [rules '(([?a ?b] [[?a :le ?b] [?a :ge ?b]] [[?a :is ?b]])
+                ([?a ?b] [[?a :le ?b] [?a :ge ?b]] [[?b :is ?a]]))]
+    ;; Sic, that is 3-arity equality:
+    (= rules
+       (read-rules "resources/rules.edn")
+       (read-rules (io/resource "rules.edn")))))
 
 ;; Read rules, splice them into the macro form and eval. This produces
 ;; "rules-as-a-function"  basically  in  the  same way  as  the  macro
 ;; "defrules", albeit at run time.
-(defn- make-rules []
-  (let [arities (read-rules)
+(defn- make-rules [source]
+  (let [arities (read-rules source)
         code `(defrules ~@arities)]
     (eval code)))
 
 ;; (test-3) => true
 (defn- test-3 []
-  (let [rules (make-rules)
+  (let [rules (make-rules (io/resource "rules.edn"))
         facts [[1 :is "one"]
                [2 :is "two"]]]
     (= (rules facts)
