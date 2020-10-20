@@ -243,13 +243,11 @@
 ;; (test-3) => true
 (defn- test-3 []
   (let [rules (load-rules (io/resource "rules.edn"))
-        facts [[1 :is "one"]
-               [2 :is "two"]]]
+        facts [[0 :is :int]
+               [100 :is :int]]]
     (= (rules facts)
-       #{["two" :ge 2] [2 :ge "two"]
-         [1 :le "one"] ["one" :le 1]
-         ["one" :ge 1] [1 :ge "one"]
-         [2 :le "two"] ["two" :le 2]})))
+       #{[-1 :is :int] [0 :is :int] [1 :is :int]
+         [99 :is :int] [100 :is :int] [101 :is :int]})))
 
 (defn- main [facts-path rules-path]
   (println (test-1))
@@ -260,6 +258,7 @@
   ;; any EDN in full:
   (let [facts (read-rules facts-path)
         rules (load-rules rules-path)]
+    (println facts)
     (println (rules facts))
     (println (rules (rules facts)))))
 
