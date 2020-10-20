@@ -234,6 +234,11 @@
         code `(defrules ~@arities)]
     (eval code)))
 
+;; For completness we provide read-facts too. Facts should preferrably
+;; handled as a Sets.
+(defn- read-facts [source]
+  (set (slurp-edn source)))
+
 ;; (test-3) => true
 (defn- test-3 []
   (let [rules (load-rules (io/resource "rules.edn"))
@@ -248,8 +253,9 @@
   (println (test-1a))
   (println (test-2))
   (println (test-3))
-  ;; Here slurp-edn just slurps any EDN in full, work also for facts:
-  (let [facts (slurp-edn facts-path)
+  ;; Here slurp-edn would also work  for facts, except it would return
+  ;; a list, not a set:
+  (let [facts (read-facts facts-path)
         rules (load-rules rules-path)]
     (println facts)
     (println (rules facts))
