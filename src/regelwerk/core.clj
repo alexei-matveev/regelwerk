@@ -201,10 +201,8 @@
      ;; when
      [[?a :is ?b]])]))
 
-;;
-;; This should read all objects from  the file with edn data. Not just
-;; the fist one that is returned bei clojure.edn/read ...
-;;
+;; This should read all objects from a strea of edn text. Not just the
+;; first object that is returned bei clojure.edn/read ...
 (defn- read-seq [stream]
   ;; This unique sentinel object will be returned on EOF bei edn/read:
   (let [eof (Object.)]
@@ -215,28 +213,24 @@
       ;; EOF itself is however not part of the sequence:
       (take-while #(not= eof %) (parse stream)))))
 
-;; Read the  rules, from  a file or  a resource in  the JAR  -- supply
+;; Read EDN  in full, from  a file or a  resource in the  JAR.  Supply
 ;; either  a  path  like  "resources/rules.edn"  or  a  resource  like
 ;; (io/resource "rules.edn"):
-(defn- read-rules [source]
+(defn- slurp-edn [source]
   (-> source
       (io/reader)
       (java.io.PushbackReader.)
       (read-seq)))
 
 (comment
-  (let [rules '(([?a ?b] [[?a :le ?b] [?a :ge ?b]] [[?a :is ?b]])
-                ([?a ?b] [[?a :le ?b] [?a :ge ?b]] [[?b :is ?a]]))]
-    ;; Sic, that is 3-arity equality:
-    (= rules
-       (read-rules "resources/rules.edn")
-       (read-rules (io/resource "rules.edn")))))
+  (= (slurp-edn "resources/rules.edn")
+     (slurp-edn (io/resource "rules.edn"))))
 
 ;; Read and eval rules, splice them into the macro form and eval. This
 ;; produces  "rules-as-a-function" basically  in the  same way  as the
 ;; macro "defrules", albeit at run time.
 (defn- load-rules [source]
-  (let [arities (read-rules source)
+  (let [arities (slurp-edn source)
         code `(defrules ~@arities)]
     (eval code)))
 
@@ -254,9 +248,8 @@
   (println (test-1a))
   (println (test-2))
   (println (test-3))
-  ;; FIXME: read-rules  is probably a  bad name, since it  just slurps
-  ;; any EDN in full:
-  (let [facts (read-rules facts-path)
+  ;; Here slurp-edn just slurps any EDN in full, work also for facts:
+  (let [facts (slurp-edn facts-path)
         rules (load-rules rules-path)]
     (println facts)
     (println (rules facts))
