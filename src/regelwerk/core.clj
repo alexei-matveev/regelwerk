@@ -251,8 +251,17 @@
          ["one" :ge 1] [1 :ge "one"]
          [2 :le "two"] ["two" :le 2]})))
 
-(defn -main [& args]
+(defn- main [facts-path rules-path]
   (println (test-1))
   (println (test-1a))
   (println (test-2))
-  (println (test-3)))
+  (println (test-3))
+  ;; FIXME: read-rules  is probably a  bad name, since it  just slurps
+  ;; any EDN in full:
+  (let [facts (read-rules facts-path)
+        rules (load-rules rules-path)]
+    (println (rules facts))))
+
+(defn -main [& args]
+  ;; Because I am too lazy to type it every time.
+  (main "resources/facts.edn" "resources/rules.edn"))
