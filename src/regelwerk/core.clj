@@ -257,9 +257,13 @@
   ;; a list, not a set:
   (let [facts (read-facts facts-path)
         rules (load-rules rules-path)]
-    (println facts)
-    (println (rules facts))
-    (println (rules (rules facts)))))
+    ;;
+    ;; Very functional way to iterate lazily:
+    ;;
+    ;; (iterate f x) = (x (f x) (f (f x)) ...)
+    ;;
+    (doseq [facts (take 3 (iterate rules facts))]
+      (println facts))))
 
 (defn -main [& args]
   ;; Because I am too lazy to type it every time.
