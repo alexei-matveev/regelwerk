@@ -21,16 +21,17 @@
             [clojure.edn :as edn]))
 
 ;;
-;; Many  possible  syntaxes  for   rules.   FIXME:  Maybe  one  should
+;; Many possible syntaxes for rules  are possible to choose from. This
+;; is probably  the case  whan the  choice is  bad.  Maybe  one should
 ;; postulate that a "rule without body is a fact"?  "A fact is true no
-;; matter what", like  PAIP says. This could constrain  the search the
+;; matter what", like PAIP says.  This could limit the choises for the
 ;; "most parctical" syntax  by e.g.  favoring the  "head first" syntax
 ;; as in Prolog:
 ;;
 ;;      Fact.
 ;;      Head (Vars) <- Body (Vars).
 ;;
-;; Rules could be plain data.  There is only six permutations.
+;; There is only six permutations.
 ;;
 ;;     vars head body <- current
 ;;     vars body head <- does not reduce to fact with empty body?
@@ -39,21 +40,32 @@
 ;;     head vars body
 ;;     head body vars
 ;;
-;; It may help to think of "body" = "when" & "head" = "then".
+;; One might  start to think of  rules as plain data  with essentially
+;; three  blocks:   generated  facts,   conditions,  and   mostly  for
+;; technichal reasons a vector of variables.   It may help to think of
+;; "body" = "when" & "head" = "then" as in this structure:
 ;;
-(comment
-  (quote
-   {:then [["water" :is "wet"]]}
-   {:vars [?a ?b] :when [[?a :is ?b]] :then [[?a :is :object]
-                                             [?b :is :adjective]]})
-  (defrule [?a ?b]
-    [[?a :is ?b]] => [[:a ?a :b ?b]])
-  (defrule named-rule [?a ?b]
-    [[?a :is ?b]] => [[:a ?a :b ?b]])
-  (forall [?a ?b] [[?a :is ?b]] => [[:a ?a :b ?b]])
-  (for-each [?a ?b] :where [[?a :is ?b]] => [:a ?a :b ?b])
-  (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
-  (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]]))
+;;   (quote
+;;    {:then [["water" :is "wet"]]}
+;;    {:vars [?a ?b] :when [[?a :is ?b]] :then [[?a :is :object]
+;;                                              [?b :is :adjective]]})
+;;
+;; A few early ideas for syntaxes for inspiration:
+;;
+;;   (define-rule [?a ?b]
+;;     [[?a :is ?b]] => [[:a ?a :b ?b]])
+;;
+;;   (define-rule named-rule [?a ?b]
+;;     [[?a :is ?b]] => [[:a ?a :b ?b]])
+;;
+;;   (forall [?a ?b] [[?a :is ?b]] => [[:a ?a :b ?b]])
+;;
+;;   (for-each [?a ?b] :where [[?a :is ?b]] => [:a ?a :b ?b])
+;;
+;;   (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
+;;
+;;   (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]])
+;;
 
 ;; This  will  return   the  *code*  for  the  rule   as  function  of
 ;; facts. People tend to call it compilaiton, that is why the name:
