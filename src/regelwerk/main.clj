@@ -5,6 +5,45 @@
   (:require [regelwerk.core :as rwk])
   (:gen-class))
 
+;;
+;; These rules can be used to  simulate reading rules at run time from
+;; some external source. The expression  part will be eval-ed, so that
+;; it  effectively  alows  calling   arbitrary  code  ---  a  security
+;; nightmare in some scenarios.
+;;
+;; FIXME: we had  imported clojure.string as str befor.  In CIDER that
+;; abbreviation  is understood.   With "lein  run" one  gets "No  such
+;; namespace: str". Hence fully qualified symbols here.
+;;
+(defn- unused-rules []
+  (quote
+   [([?a ?b]
+     [[?b :x ?a]
+      [?a :y (clojure.string/upper-case ?b)]]
+     ;; when:
+     [[?a :is ?b]])
+    ([?a ?b] [[:ab :glued (clojure.string/join "-" [?a ?b])]] [[?a :is ?b]])
+    ;; Side effect are possibles, but do you really mean it?
+    ([?a ?b]
+     (println "nil expression is like an empty seq")
+     ;; when
+     [[?a :is ?b]])
+    ([?a ?b]
+     (println {:a ?a, :b ?b})
+     ;; when
+     [[?a :is ?b]])
+    ;; The  *ns*  dynvar  evaluates  to  clojure.core  when  run  from
+    ;; Leiningen  or a  Jar  file.  Only  in CIDER  it  happens to  be
+    ;; regelwerk.core, accidentally  this is  also when the  alias str
+    ;; for clojure.string happens to work.
+    ([?a ?b]
+     (do
+       (println *ns*)
+       (println "fire missles, at every match")
+       [[:missles :were "fired"]])
+     ;; when
+     [[?a :is ?b]])]))
+
 ;; (test-1) => true
 (defn- test-1 []
   (let [rule (rwk/defrule [?a ?b]
