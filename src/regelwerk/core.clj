@@ -19,8 +19,7 @@
   (:require [datascript.core :as d]
             [clojure.java.io :as io]
             [clojure.string :as str]
-            [clojure.edn :as edn])
-  (:gen-class))
+            [clojure.edn :as edn]))
 
 ;;
 ;; Many  possible  syntaxes  for   rules.   FIXME:  Maybe  one  should
@@ -229,14 +228,14 @@
 ;; Read and eval rules, splice them into the macro form and eval. This
 ;; produces  "rules-as-a-function" basically  in the  same way  as the
 ;; macro "defrules", albeit at run time.
-(defn- load-rules [source]
+(defn load-rules [source]
   (let [arities (slurp-edn source)
         code `(defrules ~@arities)]
     (eval code)))
 
 ;; For completness we provide read-facts too. Facts should preferrably
 ;; handled as a Sets.
-(defn- read-facts [source]
+(defn read-facts [source]
   (set (slurp-edn source)))
 
 ;; (test-3) => true
@@ -248,23 +247,9 @@
        #{[-1 :is :int] [0 :is :int] [1 :is :int]
          [99 :is :int] [100 :is :int] [101 :is :int]})))
 
-(defn- main [facts-path rules-path]
+;; Will not be part of public module interface, just testing:
+(defn test-all []
   (println (test-1))
   (println (test-1a))
   (println (test-2))
-  (println (test-3))
-  ;; Here slurp-edn would also work  for facts, except it would return
-  ;; a list, not a set:
-  (let [facts (read-facts facts-path)
-        rules (load-rules rules-path)]
-    ;;
-    ;; Very functional way to iterate lazily:
-    ;;
-    ;; (iterate f x) = (x (f x) (f (f x)) ...)
-    ;;
-    (doseq [facts (take 3 (iterate rules facts))]
-      (println facts))))
-
-(defn -main [& args]
-  ;; Because I am too lazy to type it every time.
-  (main "resources/facts.edn" "resources/rules.edn"))
+  (println (test-3)))
