@@ -5,7 +5,23 @@
   (:require [regelwerk.core :as rwk])
   (:gen-class))
 
+;; (test-3) => true
+(defn- test-3 []
+  (let [rules (rwk/load-rules (clojure.java.io/resource "rules.edn"))
+        facts [[0 :is :int]
+               [100 :is :int]]]
+    (= (rules facts)
+       #{[-1 :is :int] [0 :is :int] [1 :is :int]
+         [99 :is :int] [100 :is :int] [101 :is :int]})))
+
+(defn test-all []
+  #_(println (test-1))
+  #_(println (test-1a))
+  #_(println (test-2))
+  (println (test-3)))
+
 (defn- main [facts-path rules-path]
+  (test-all)
   (rwk/test-all)
   ;; Here slurp-edn would also work  for facts, except it would return
   ;; a list, not a set:

@@ -238,18 +238,8 @@
 (defn read-facts [source]
   (set (slurp-edn source)))
 
-;; (test-3) => true
-(defn- test-3 []
-  (let [rules (load-rules (io/resource "rules.edn"))
-        facts [[0 :is :int]
-               [100 :is :int]]]
-    (= (rules facts)
-       #{[-1 :is :int] [0 :is :int] [1 :is :int]
-         [99 :is :int] [100 :is :int] [101 :is :int]})))
-
 ;; Will not be part of public module interface, just testing:
 (defn test-all []
   (println (test-1))
   (println (test-1a))
-  (println (test-2))
-  (println (test-3)))
+  (println (test-2)))
