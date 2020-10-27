@@ -22,7 +22,7 @@
 
 ;;
 ;; Many possible syntaxes for rules  are possible to choose from. This
-;; is probably  the case  whan the  choice is  bad.  Maybe  one should
+;; is probably  the case  when the  choice is  bad.  Maybe  one should
 ;; postulate that a "rule without body is a fact"?  "A fact is true no
 ;; matter what", like PAIP says.  This could limit the choises for the
 ;; "most parctical" syntax  by e.g.  favoring the  "head first" syntax
@@ -91,6 +91,28 @@
 ;; C-u C-x C-e if you want to see the expansion:
 (comment
   (macroexpand '(defrule [?a ?b] [[?b ?a]] [[?a :is ?b]])))
+
+;;
+;; That (into #{} ...) in the  compile-rule code for the new generated
+;; facts could have been also (into facts# ...) if we decided that the
+;; rules not only return the *new*  facts but instead *extend* the set
+;; of facts we started from.  Many  rule engines do *insert* new facts
+;; into some "global" database of facts.   It might be not a very good
+;; idea at  the end,  but I  cannot quite articulate  why. Here  is an
+;; attempt:
+;;
+;; - The initial facts dont actually need to  be a Set like #{}. It is
+;;   common, also in this code to use  a vector [] when actually a Set
+;;   ist  meant  --- just  look  at  all  the examples.   Moreover,  a
+;;   Datascript quqery will accept a proper DB of facts as input. Will
+;;   it also support (into ...)?
+;;
+;; - A  generalization  of  the  above objection  might  be  a  strict
+;;   distinction between  domain and  range of a  function ---  we did
+;;   postulate   that   "rules   are   just   a   function   producing
+;;   facts". Inserting new facts into existing DB kind of assumes that
+;;   range and domain are identical. This is a serious assumption.
+;;
 
 ;;
 ;; It will rarely stay  by one rule. Do we need a  macro for that? The
