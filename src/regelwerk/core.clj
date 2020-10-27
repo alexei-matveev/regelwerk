@@ -81,18 +81,6 @@
 (comment
   (macroexpand '(defrule [?a ?b] [[?b ?a]] [[?a :is ?b]])))
 
-;; (test-1) => true
-(defn- test-1 []
-  (let [rule (defrule [?a ?b]
-               [[?b :x ?a]
-                [?a :y (str/upper-case ?b)]]
-               ;; <-
-               [[?a :is ?b]])
-        facts [[1 :is "odd"]
-               [2 :is "even"]]]
-    (= (rule facts)
-       #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})))
-
 ;;
 ;; It will rarely stay  by one rule. Do we need a  macro for that? The
 ;; simplest  extension is  to accept  a  list of  3-tuples (vars  head
@@ -214,6 +202,3 @@
 (defn read-facts [source]
   (set (slurp-edn source)))
 
-;; Will not be part of public module interface, just testing:
-(defn test-all []
-  (println (test-1)))

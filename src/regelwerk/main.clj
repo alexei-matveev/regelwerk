@@ -5,6 +5,18 @@
   (:require [regelwerk.core :as rwk])
   (:gen-class))
 
+;; (test-1) => true
+(defn- test-1 []
+  (let [rule (rwk/defrule [?a ?b]
+               [[?b :x ?a]
+                [?a :y (clojure.string/upper-case ?b)]]
+               ;; <-
+               [[?a :is ?b]])
+        facts [[1 :is "odd"]
+               [2 :is "even"]]]
+    (= (rule facts)
+       #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})))
+
 ;; (test-1a) => true
 (defn- test-1a []
   (let [f (fn [a b]
@@ -39,14 +51,13 @@
          [99 :is :int] [100 :is :int] [101 :is :int]})))
 
 (defn test-all []
-  #_(println (test-1))
+  (println (test-1))
   (println (test-1a))
   (println (test-2))
   (println (test-3)))
 
 (defn- main [facts-path rules-path]
   (test-all)
-  (rwk/test-all)
   ;; Here slurp-edn would also work  for facts, except it would return
   ;; a list, not a set:
   (let [facts (rwk/read-facts facts-path)
