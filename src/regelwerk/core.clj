@@ -18,7 +18,6 @@
 (ns regelwerk.core
   (:require [datascript.core :as d]
             [clojure.java.io :as io]
-            [clojure.string :as str]
             [clojure.edn :as edn]))
 
 ;;
