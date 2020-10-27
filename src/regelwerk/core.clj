@@ -152,16 +152,6 @@
        (into #{} cat (for [f# [~@fs]]
                        (f# facts#))))))
 
-;; (test-2) => true
-(defn- test-2 []
-  (let [rules (defrules
-                ([?a ?b] [[?b ?a]] [[?a :is ?b]])
-                ([?a ?b] [[?a ?b]] [[?a :is ?b]]))
-        facts [[1 :is "odd"]
-               [2 :is "even"]]]
-    (= (rules facts)
-       #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))
-
 ;;
 ;; Simulate reading rules  at run time from some  external source. The
 ;; expression  part  will be  eval-ed,  so  that it  effectivel  alows
@@ -241,5 +231,4 @@
 ;; Will not be part of public module interface, just testing:
 (defn test-all []
   (println (test-1))
-  (println (test-1a))
-  (println (test-2)))
+  (println (test-1a)))
