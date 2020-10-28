@@ -1,5 +1,7 @@
 # Trying Macros for Rules
 
+[![Clojars Project](https://img.shields.io/clojars/v/f0bec0d/regelwerk.svg)](https://clojars.org/f0bec0d/regelwerk)
+
 To keep thing simple and see where it leads us we postulate here that
 a rule or a rule set is just a function of facts producing new
 facts. No more, no less.
