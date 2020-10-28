@@ -1,6 +1,6 @@
-(defproject f0bec0d/regelwerk "0.1.0-SNAPSHOT"
-  :description "Try CLI for Datalog"
-  :url "http://example.com/FIXME"
+(defproject f0bec0d/regelwerk "0.0.1-SNAPSHOT"
+  :description "Simplified rule engine"
+  :url "https://github.com/alexei-matveev/regelwerk"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.10.1"]
