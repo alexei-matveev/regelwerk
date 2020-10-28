@@ -1,4 +1,4 @@
-(defproject f0bec0d/regelwerk "0.0.1-SNAPSHOT"
+(defproject f0bec0d/regelwerk "0.0.1"
   :description "Simplified rule engine"
   :url "https://github.com/alexei-matveev/regelwerk"
   :license {:name "Eclipse Public License"
