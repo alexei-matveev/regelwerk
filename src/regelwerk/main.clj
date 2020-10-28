@@ -80,20 +80,10 @@
     (= (rules facts)
        #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))
 
-;; (test-3) => true
-(defn- test-3 []
-  (let [rules (rwk/load-rules (clojure.java.io/resource "rules.edn"))
-        facts [[0 :is :int]
-               [100 :is :int]]]
-    (= (rules facts)
-       #{[-1 :is :int] [0 :is :int] [1 :is :int]
-         [99 :is :int] [100 :is :int] [101 :is :int]})))
-
 (defn test-all []
   (println (test-1))
   (println (test-1a))
-  (println (test-2))
-  (println (test-3)))
+  (println (test-2)))
 
 ;; This is  how you adapt rules  that produce new facts  to make rules
 ;; that *insert* new facts:
@@ -117,7 +107,7 @@
     ;; You may want to compare behaviour of the original and "dressed"
     ;; rules.
     ;;
-    (doseq [facts (take 4 (iterate (dress rules) facts))]
+    (doseq [facts (take 6 (iterate (dress rules) facts))]
       (println facts))))
 
 (defn -main [& args]

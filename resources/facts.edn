@@ -1,3 +1,2 @@
 [0 :is :int]
-[1 :reads "one"]
-[2 :reads "two"]
+[42 :is :int]

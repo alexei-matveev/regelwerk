@@ -8,9 +8,8 @@
 ;; domain" so that you will have to pass them through yourself here or
 ;; set/union in the code:
 ([?n]
- [[(+ ?n 1) :is :int]
-  ;; [?n :is :int]                         ; pass through
-  [(- ?n 1) :is :int]]
+ [[(mod (+ ?n 1) 8) :is :int]
+  [(mod (- ?n 1) 8) :is :int]]
  ;; when
  [[?n :is :int]])
 
@@ -18,8 +17,3 @@
 ;; the defrules-macro. The reader comment works as expected though:
 #_(comment "Hi!")
 
-#_([?x ?x-word ?y-word ?y]
- [[[?x ?y] :reads (str ?x-word " " ?y-word)]]
- ;; when
- [[?x :reads ?x-word]
-  [?y :reads ?y-word]])
