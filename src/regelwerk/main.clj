@@ -95,6 +95,14 @@
   (println (test-2))
   (println (test-3)))
 
+;; This is  how you adapt rules  that produce new facts  to make rules
+;; that *insert* new facts:
+(defn- dress [rules]
+  (fn [facts]
+    ;; In case it was just an vector, convert it to facts:
+    (let [db (set facts)]
+      (clojure.set/union db (rules db)))))
+
 (defn- main [facts-path rules-path]
   (test-all)
   ;; Here slurp-edn would also work  for facts, except it would return
@@ -104,9 +112,12 @@
     ;;
     ;; Very functional way to iterate lazily:
     ;;
-    ;; (iterate f x) = (x (f x) (f (f x)) ...)
+    ;;     (iterate f x) = (x (f x) (f (f x)) ...)
     ;;
-    (doseq [facts (take 3 (iterate rules facts))]
+    ;; You may want to compare behaviour of the original and "dressed"
+    ;; rules.
+    ;;
+    (doseq [facts (take 4 (iterate (dress rules) facts))]
       (println facts))))
 
 (defn -main [& args]
