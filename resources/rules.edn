@@ -9,7 +9,7 @@
 ;; set/union in the code:
 ([?n]
  [[(+ ?n 1) :is :int]
-  [?n :is :int]                         ; pass through
+  ;; [?n :is :int]                         ; pass through
   [(- ?n 1) :is :int]]
  ;; when
  [[?n :is :int]])
