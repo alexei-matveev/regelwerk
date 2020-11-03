@@ -80,10 +80,20 @@
     (= (rules facts)
        #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))
 
+;; (test-3) => true
+(defn- test-3 []
+  (let [rules (rwk/defrules
+                ([?a ?b] [[?b ?a]] [[?a :is :like ?b]]))
+        facts [[1 :is :like "one" :score 42 "many" "more" "attrs"]
+               [2 :is :like "two" :score 99]]]
+    (= (rules facts)
+       #{["two" 2] ["one" 1]})))
+
 (defn test-all []
   (println (test-1))
   (println (test-1a))
-  (println (test-2)))
+  (println (test-2))
+  (println (test-3)))
 
 ;; This is  how you adapt rules  that produce new facts  to make rules
 ;; that *insert* new facts:
