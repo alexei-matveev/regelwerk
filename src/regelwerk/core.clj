@@ -5,12 +5,15 @@
 ;; story many times.  But, how usefull will macros be when you need to
 ;; read rules  at run time  from a  user-supplied file or  URL?  Well,
 ;; Clojure  "eval" does  macro  expansion as  expected  [2], see  also
-;; below. At that point it is not very far from reading data, building
-;; and evaluating the code with plain old functions.
+;; below. At that point it is not very far from reading rules from the
+;; source, and compiling them into code with plain old functions.
 ;;
-;; FWIW, the  Datascript query  is already  plain data.   You actually
-;; only  need a  macro  to  turn symbolic  expressions  "expr" into  a
-;; function of arguments "vars".
+;; FWIW, the Datascript query is already plain data.  You actually may
+;; only need  a macro  to turn  symbolic expressions  "expr" producing
+;; arbitrary new facts  into a function of arguments  "vars".  Also it
+;; appears to be  a hairy problem to "extract free  variables" from an
+;; expression. Is  it?  For  simplicity we supply  a vector  of "vars"
+;; everywhere.
 ;;
 ;; [1] https://www.braveclojure.com/writing-macros/
 ;; [2] https://www.braveclojure.com/read-and-eval/
