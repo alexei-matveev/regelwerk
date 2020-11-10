@@ -53,21 +53,13 @@
 ;;    {:vars [?a ?b] :when [[?a :is ?b]] :then [[?a :is :object]
 ;;                                              [?b :is :adjective]]})
 ;;
-;; A few early ideas for syntaxes for inspiration:
+;; Some early ideas for syntaxes for inspiration:
 ;;
 ;;   (define-rule [?a ?b]
 ;;     [[?a :is ?b]] => [[:a ?a :b ?b]])
 ;;
 ;;   (define-rule named-rule [?a ?b]
 ;;     [[?a :is ?b]] => [[:a ?a :b ?b]])
-;;
-;;   (forall [?a ?b] [[?a :is ?b]] => [[:a ?a :b ?b]])
-;;
-;;   (for-each [?a ?b] :where [[?a :is ?b]] => [:a ?a :b ?b])
-;;
-;;   (set-of [:a ?a :b ?b] :for-all [?a ?b] :such-that [[?a :is ?b]])
-;;
-;;   (produce [:a ?a :b ?b] :from [?a ?b] :where [[?a :is ?b]])
 ;;
 
 ;; This  will  return   the  *code*  for  the  rule   as  function  of
