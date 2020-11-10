@@ -197,3 +197,8 @@
 (defn read-facts [source]
   (set (slurp-edn source)))
 
+;; There might be  a use-case for read-rules too.   In fact read-rules
+;; could be identical with read-facts because both are just slurp-edn.
+;; Imagine  reading  rules from  several  sources,  merging them  with
+;; set/union and compiling.  Ah, yes, one would  need compile-rules as
+;; well.
