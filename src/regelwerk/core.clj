@@ -146,18 +146,29 @@
      [1 :eq "one"]
      [2 :eq "two"])))
 
-;; C-u C-x C-e if you want to see the expansion:
-(comment
-  (macroexpand '(defrules
-                  ([?a ?b] [[?b ?a]] [[?a :is ?b]])
-                  ([?x ?y] [[?x ?y]] [[?y :is ?y]]))))
-
-(defmacro defrules [& arities]
+;; Other rule engines  will probably want to get  all rule definitions
+;; at once in  order to apply optimizations when  transforming them to
+;; code.  We are not that sophisticated and "compile" rules one by one
+;; here.  But  this is likely  better suited to  become a part  of the
+;; public interface.
+(defn- compile-rules [arities]
   (let [fs (for [[vars expr where] arities]
              (compile-rule vars expr where))]
     `(fn [facts#]
        (into #{} cat (for [f# [~@fs]]
                        (f# facts#))))))
+
+(defmacro defrules [& arities]
+  (compile-rules arities))
+
+;; C-u C-x C-e if you want to see the expansion:
+(comment
+  (macroexpand
+   '(defrules
+      ;; vars |  head   |  body
+      ;;------|---------|------------
+      ([?a ?b] [[?a ?b]] [[?a :is ?b]])
+      ([?x ?y] [[?y ?x]] [[?x :is ?y]]))))
 
 ;; This should read all objects from a strea of edn text. Not just the
 ;; first object that is returned bei clojure.edn/read ...
