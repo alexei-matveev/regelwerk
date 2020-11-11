@@ -78,7 +78,7 @@
        ;; variables  of a  vector.   Clojure indeed  allows binding  a
        ;; vector of values to vector of  symbols --- a special case of
        ;; "destructuring bind", so it is called, I think.
-       (into #{} cat
+       (into #{} cat       ; transducer works as (reduce into #{} ...)
              (for [row# rows#]
                (let [~vars row#] ~expr))))))
 
