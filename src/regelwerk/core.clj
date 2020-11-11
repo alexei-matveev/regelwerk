@@ -48,12 +48,13 @@
 ;; technichal reasons a vector of variables.   It may help to think of
 ;; "body" = "when" & "head" = "then" as in this structure:
 ;;
-;;   (quote
-;;    {:then [["water" :is "wet"]]}
-;;    {:vars [?a ?b] :when [[?a :is ?b]] :then [[?a :is :object]
-;;                                              [?b :is :adjective]]})
+;;   {:then [["water" :is "wet"]]}
+;;   {:vars [?a ?b] :when [[?a :is ?b]] :then [[?a :is "object"]]}
+;;   {:find [?a ?b] :where [[?a :is ?b]] :then [[?b :is "adjective"]]}
 ;;
-;; Some early ideas for syntaxes for inspiration:
+;; The latter form  is almost a valid Datascript query,  extended by a
+;; "then" expression.  Maybe  we should stick with  it?  Basically any
+;; syntax would encode the same three parts, so why bother?
 ;;
 ;;   (define-rule [?a ?b]
 ;;     [[?a :is ?b]] => [[:a ?a :b ?b]])
