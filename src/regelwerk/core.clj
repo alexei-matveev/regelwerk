@@ -69,8 +69,10 @@
   `(fn [facts#]
      ;; Compute the  result set by  querieng facts with  Datascript. A
      ;; Datascript  DB can  be as  simple as  a collection  of tuples,
-     ;; mostly EAV-tuples.
-     (let [rows# (d/q '[:find ~@vars :where ~@where] facts#)]
+     ;; mostly  EAV-tuples. The  map-form of  the Datascript  query is
+     ;; more  readable  for  machines, no  need  for  unquote-splicing
+     ;; either ...
+     (let [rows# (d/q '{:find ~vars, :where ~where} facts#)]
        ;; Generate another set of objects from the supplied collection
        ;; valued  expression binding  each row  of the  result set  to
        ;; variables  of a  vector.   Clojure indeed  allows binding  a
