@@ -21,6 +21,8 @@ facts. No more, no less.
   "text" bei executing Rules
 * [Crepe](https://crates.io/crates/crepe) DSL in Rust that
   Acknowledges Souffle & Datalog for inspiration.
+* Functional Production
+  [Rules](https://leanpub.com/readevalprintlove004/read#leanpub-auto-a-simple-implementation-of-a-purely-functional-production-rules-system)
 
 ## License
 
