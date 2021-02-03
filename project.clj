@@ -3,7 +3,7 @@
   :url "https://github.com/alexei-matveev/regelwerk"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.10.1"]
+  :dependencies [[org.clojure/clojure "1.10.2"]
                  [datascript "1.0.1"]]
   :main ^:skip-aot regelwerk.main
   :target-path "target/%s"
