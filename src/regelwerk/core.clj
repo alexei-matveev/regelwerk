@@ -13,7 +13,11 @@
 ;; arbitrary new facts  into a function of arguments  "vars".  Also it
 ;; appears to be  a hairy problem to "extract free  variables" from an
 ;; expression. Is  it?  For  simplicity we supply  a vector  of "vars"
-;; everywhere.
+;; everywhere.  See also clojure.core.unify  where the unused function
+;; to search for logical variables, lvars, does not look deep into the
+;; form:
+;;
+;;     (extract-lvars '[1 ?x (str ?y) (quote ?z)]) => #{?x}
 ;;
 ;; [1] https://www.braveclojure.com/writing-macros/
 ;; [2] https://www.braveclojure.com/read-and-eval/
