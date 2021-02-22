@@ -23,6 +23,9 @@ facts. No more, no less.
   Acknowledges Souffle & Datalog for inspiration.
 * Functional Production
   [Rules](https://leanpub.com/readevalprintlove004/read#leanpub-auto-a-simple-implementation-of-a-purely-functional-production-rules-system)
+* Another unifier-based query
+  [engine](https://github.com/jimmyhmiller/one-hundred-lines-or-less/tree/master/libraries/clojure/query-engine/src/query_engine)
+* [Meander](https://github.com/noprompt/meander)
 
 ## License
 
