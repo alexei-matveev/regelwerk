@@ -89,11 +89,23 @@
     (= (rules facts)
        #{["two" 2] ["one" 1]})))
 
+;; Do you still hope to be able to extract free logic variables out of
+;; an arbitrary expression?
+(defn- test-4 []
+  (let [rules (rwk/defrules
+                ([?a]
+                 [[?a :vs (let [?a (str "p" ?a)] ?a)]]
+                 [[?a]]))
+        facts [[1] [2]]]
+    (= (rules facts)
+       #{[2 :vs "p2"] [1 :vs "p1"]})))
+
 (defn test-all []
   (println (test-1))
   (println (test-1a))
   (println (test-2))
-  (println (test-3)))
+  (println (test-3))
+  (println (test-4)))
 
 ;; This is  how you adapt rules  that produce new facts  to make rules
 ;; that *insert* new facts:
