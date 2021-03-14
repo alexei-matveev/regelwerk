@@ -44,20 +44,6 @@
      ;; when
      [[?a :is ?b]])]))
 
-;; (test-1a) => true
-(defn- test-1a []
-  (let [f (fn [a b]
-            [[b :x a]
-             [a :y (clojure.string/upper-case b)]])
-        rule (rwk/defrule [?a ?b]
-               (f ?a ?b)
-               ;; <-
-               [[?a :is ?b]])
-        facts [[1 :is "odd"]
-               [2 :is "even"]]]
-    (= (rule facts)
-       #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})))
-
 ;; (test-2) => true
 (defn- test-2 []
   (let [rules (rwk/defrules
@@ -98,7 +84,6 @@
        #{[1 :is "odd"] [2 :is "even"]})))
 
 (defn test-all []
-  (println (test-1a))
   (println (test-2))
   (println (test-3))
   (println (test-4)))
