@@ -100,6 +100,15 @@
     (= (rules facts)
        #{[2 :vs "p2"] [1 :vs "p1"]})))
 
+;; (test-5) => true
+(defn- test-5 []
+  (let [rules (rwk/defrules
+                ([[1 :is "odd"]
+                  [2 :is "even"]]))
+        facts [[:does] [:not] [:matter]]]
+    (= (rules facts)
+       #{[1 :is "odd"] [2 :is "even"]})))
+
 (defn test-all []
   (println (test-1))
   (println (test-1a))

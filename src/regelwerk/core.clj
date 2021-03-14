@@ -69,7 +69,7 @@
 
 ;; This  will  return   the  *code*  for  the  rule   as  function  of
 ;; facts. People tend to call it compilaiton, that is why the name:
-(defn- compile-rule [vars expr where]
+(defn- do-compile-rule [vars expr where]
   ;; This will be a funciton of a fact database:
   `(fn [facts#]
      ;; Compute the  result set by  querieng facts with  Datascript. A
@@ -87,8 +87,21 @@
              (for [row# rows#]
                (let [~vars row#] ~expr))))))
 
-(defmacro defrule [vars expr where]
-  (compile-rule vars expr where))
+(defn- do-compile-facts [expr]
+  ;; This must be also a funciton of a fact database:
+  `(fn [unused-facts#] (set ~expr)))
+
+(defn- compile-rule [forms]
+  (if (= 1 (count forms))
+    ;; one form => just facts:
+    (let [[expr] forms]
+      (do-compile-facts expr))
+    ;; three forms => regular rule:
+    (let [[vars expr where] forms]
+      (do-compile-rule vars expr where))))
+
+(defmacro defrule [& forms]
+  (compile-rule forms))
 
 ;; C-u C-x C-e if you want to see the expansion:
 (comment
@@ -154,8 +167,12 @@
 ;; here.  But  this is likely  better suited to  become a part  of the
 ;; public interface.
 (defn- compile-rules [arities]
-  (let [fs (for [[vars expr where] arities]
-             (compile-rule vars expr where))]
+  ;; Normally the rule consists of  variable vector, an expression and
+  ;; a where query: "forms" is a list of three forms. However we wanto
+  ;; to  be   able  to  special   case  on  the  facts   as  variable-
+  ;; condition-free rule with just one form, the expression itself.
+  (let [fs (for [forms arities]
+             (compile-rule forms))]
     `(fn [facts#]
        (into #{} cat (for [f# [~@fs]]
                        (f# facts#))))))
