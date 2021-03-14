@@ -70,7 +70,7 @@
 ;; This  will  return   the  *code*  for  the  rule   as  function  of
 ;; facts. People tend to call it compilaiton, that is why the name:
 (defn- do-compile-rule [vars expr where]
-  ;; This will be a funciton of a fact database:
+  ;; This will be a function of a fact database:
   `(fn [facts#]
      ;; Compute the  result set by  querieng facts with  Datascript. A
      ;; Datascript  DB can  be as  simple as  a collection  of tuples,
@@ -93,7 +93,7 @@
                (let [~vars row#] ~expr))))))
 
 (defn- do-compile-facts [expr]
-  ;; This must be also a funciton of a fact database:
+  ;; This must be also a function of a fact database:
   `(fn [unused-facts#] (set ~expr)))
 
 (defn- compile-rule [forms]
