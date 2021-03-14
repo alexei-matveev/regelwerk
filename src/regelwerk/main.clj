@@ -44,15 +44,6 @@
      ;; when
      [[?a :is ?b]])]))
 
-;; (test-5) => true
-(defn- test-5 []
-  (let [rules (rwk/defrules
-                ([[1 :is "odd"]
-                  [2 :is "even"]]))
-        facts [[:does] [:not] [:matter]]]
-    (= (rules facts)
-       #{[1 :is "odd"] [2 :is "even"]})))
-
 ;; This is  how you adapt rules  that produce new facts  to make rules
 ;; that *insert* new facts:
 (defn- dress [rules]

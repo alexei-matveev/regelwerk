@@ -59,3 +59,12 @@
           facts [[1] [2]]]
       (is (= (rules facts)
              #{[2 :vs "p2"] [1 :vs "p1"]})))))
+
+(deftest test-5
+  (testing "Single arity rule is plain facts ..."
+    (let [rules (defrules
+                  ([[1 :is "odd"]
+                    [2 :is "even"]]))
+          facts [[:does] [:not] [:matter]]]
+      (is (= (rules facts)
+             #{[1 :is "odd"] [2 :is "even"]})))))
