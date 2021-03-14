@@ -44,17 +44,6 @@
      ;; when
      [[?a :is ?b]])]))
 
-;; Do you still hope to be able to extract free logic variables out of
-;; an arbitrary expression?
-(defn- test-4 []
-  (let [rules (rwk/defrules
-                ([?a]
-                 [[?a :vs (let [?a (str "p" ?a)] ?a)]]
-                 [[?a]]))
-        facts [[1] [2]]]
-    (= (rules facts)
-       #{[2 :vs "p2"] [1 :vs "p1"]})))
-
 ;; (test-5) => true
 (defn- test-5 []
   (let [rules (rwk/defrules
@@ -63,9 +52,6 @@
         facts [[:does] [:not] [:matter]]]
     (= (rules facts)
        #{[1 :is "odd"] [2 :is "even"]})))
-
-(defn test-all []
-  (println (test-4)))
 
 ;; This is  how you adapt rules  that produce new facts  to make rules
 ;; that *insert* new facts:
@@ -76,7 +62,6 @@
       (clojure.set/union db (rules db)))))
 
 (defn- main [facts-path rules-path]
-  (test-all)
   ;; Here slurp-edn would also work  for facts, except it would return
   ;; a list, not a set:
   (let [facts (rwk/read-facts facts-path)

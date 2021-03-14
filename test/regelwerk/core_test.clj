@@ -39,7 +39,6 @@
       (is (= (rules facts)
              #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))))
 
-;; (test-3) => true
 (deftest test-3
   (testing "Facts and queries for longer rows beyond EAV ..."
     (let [rules (defrules
@@ -48,3 +47,15 @@
                  [2 :is :like "two" :score 99]]]
       (is (= (rules facts)
              #{["two" 2] ["one" 1]})))))
+
+;; Do you still hope to be able to extract free logic variables out of
+;; an arbitrary expression?
+(deftest test-4
+  (testing "Logic variables and bindings in a single expression ..."
+    (let [rules (defrules
+                  ([?a]
+                   [[?a :vs (let [?a (str "p" ?a)] ?a)]]
+                   [[?a]]))
+          facts [[1] [2]]]
+      (is (= (rules facts)
+             #{[2 :vs "p2"] [1 :vs "p1"]})))))
