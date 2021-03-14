@@ -76,7 +76,12 @@
      ;; Datascript  DB can  be as  simple as  a collection  of tuples,
      ;; mostly  EAV-tuples. The  map-form of  the Datascript  query is
      ;; more  readable  for  machines, no  need  for  unquote-splicing
-     ;; either ...
+     ;; either.  FWIW,  the Datascript  syntax does  not seem  to make
+     ;; sense without vars. So that the rules with empty list of logic
+     ;; variables do  not compile  at the moment.   FIXME: how  do you
+     ;; check for an existing EAV fact with concrete E, A and V in the
+     ;; DB and generate  new facts depending on  its existence?  Think
+     ;; of "conditional facts" as opposed to "unconditional facts".
      (let [rows# (d/q '{:find ~vars, :where ~where} facts#)]
        ;; Generate another set of objects from the supplied collection
        ;; valued  expression binding  each row  of the  result set  to
