@@ -1,5 +1,6 @@
 ;;
-;; Try using core from outside.
+;; Try using core  from outside. See also the  test/ sibling directory
+;; of src/.
 ;;
 (ns regelwerk.main
   (:require [regelwerk.core :as rwk])
