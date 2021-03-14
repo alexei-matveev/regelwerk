@@ -27,3 +27,14 @@
                  [2 :is "even"]]]
       (is (= (rule facts)
              #{["odd" :x 1] ["even" :x 2] [1 :y "ODD"] [2 :y "EVEN"]})))))
+
+
+(deftest test-2
+  (testing "Multiple rules in single macro ..."
+    (let [rules (defrules
+                  ([?a ?b] [[?b ?a]] [[?a :is ?b]])
+                  ([?a ?b] [[?a ?b]] [[?a :is ?b]]))
+          facts [[1 :is "odd"]
+                 [2 :is "even"]]]
+      (is (= (rules facts)
+             #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))))

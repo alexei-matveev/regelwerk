@@ -44,16 +44,6 @@
      ;; when
      [[?a :is ?b]])]))
 
-;; (test-2) => true
-(defn- test-2 []
-  (let [rules (rwk/defrules
-                ([?a ?b] [[?b ?a]] [[?a :is ?b]])
-                ([?a ?b] [[?a ?b]] [[?a :is ?b]]))
-        facts [[1 :is "odd"]
-               [2 :is "even"]]]
-    (= (rules facts)
-       #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))
-
 ;; (test-3) => true
 (defn- test-3 []
   (let [rules (rwk/defrules
@@ -84,7 +74,6 @@
        #{[1 :is "odd"] [2 :is "even"]})))
 
 (defn test-all []
-  (println (test-2))
   (println (test-3))
   (println (test-4)))
 
