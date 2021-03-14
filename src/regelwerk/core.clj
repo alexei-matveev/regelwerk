@@ -166,13 +166,16 @@
 ;; code.  We are not that sophisticated and "compile" rules one by one
 ;; here.  But  this is likely  better suited to  become a part  of the
 ;; public interface.
+;;
+;; Normally the rule consists of  variable vector, an expression and a
+;; where query --- a  list of three forms. However we  want to be able
+;; to  special  case  on  the  "universal"  facts  free  of  variables
+;; conditions  ---  a  rule  with   just  one  form,  the  fact-valued
+;; expression itself. The  length of lists in  the sequence "artities"
+;; will  thus  be  typicall  3  and somtimes  1.   The  working  horse
+;; "compile-rule" is supposed to handle both cases accordingly.
 (defn- compile-rules [arities]
-  ;; Normally the rule consists of  variable vector, an expression and
-  ;; a where query: "forms" is a list of three forms. However we wanto
-  ;; to  be   able  to  special   case  on  the  facts   as  variable-
-  ;; condition-free rule with just one form, the expression itself.
-  (let [fs (for [forms arities]
-             (compile-rule forms))]
+  (let [fs (map compile-rule arities)]
     `(fn [facts#]
        (into #{} cat (for [f# [~@fs]]
                        (f# facts#))))))
