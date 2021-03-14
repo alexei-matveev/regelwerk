@@ -44,15 +44,6 @@
      ;; when
      [[?a :is ?b]])]))
 
-;; (test-3) => true
-(defn- test-3 []
-  (let [rules (rwk/defrules
-                ([?a ?b] [[?b ?a]] [[?a :is :like ?b]]))
-        facts [[1 :is :like "one" :score 42 "many" "more" "attrs"]
-               [2 :is :like "two" :score 99]]]
-    (= (rules facts)
-       #{["two" 2] ["one" 1]})))
-
 ;; Do you still hope to be able to extract free logic variables out of
 ;; an arbitrary expression?
 (defn- test-4 []
@@ -74,7 +65,6 @@
        #{[1 :is "odd"] [2 :is "even"]})))
 
 (defn test-all []
-  (println (test-3))
   (println (test-4)))
 
 ;; This is  how you adapt rules  that produce new facts  to make rules

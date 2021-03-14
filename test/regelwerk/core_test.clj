@@ -30,7 +30,7 @@
 
 
 (deftest test-2
-  (testing "Multiple rules in single macro ..."
+  (testing "Multiple rules in a single macro call ..."
     (let [rules (defrules
                   ([?a ?b] [[?b ?a]] [[?a :is ?b]])
                   ([?a ?b] [[?a ?b]] [[?a :is ?b]]))
@@ -38,3 +38,13 @@
                  [2 :is "even"]]]
       (is (= (rules facts)
              #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))))
+
+;; (test-3) => true
+(deftest test-3
+  (testing "Facts and queries for longer rows beyond EAV ..."
+    (let [rules (defrules
+                  ([?a ?b] [[?b ?a]] [[?a :is :like ?b]]))
+          facts [[1 :is :like "one" :score 42 "many" "more" "attrs"]
+                 [2 :is :like "two" :score 99]]]
+      (is (= (rules facts)
+             #{["two" 2] ["one" 1]})))))
