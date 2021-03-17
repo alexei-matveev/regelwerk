@@ -1,2 +1,2 @@
 [0 :is :int]
-[42 :is :int]
+[3.14 :is :double]

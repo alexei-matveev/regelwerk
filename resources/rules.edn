@@ -8,10 +8,16 @@
 ;; domain" so that you will have to pass them through yourself here or
 ;; set/union in the code:
 ([?n]
- [[(mod (+ ?n 1) 8) :is :int]
-  [(mod (- ?n 1) 8) :is :int]]
+ [[(mod (inc ?n) 4) :is :int]
+  [(mod (dec ?n) 4) :is :int]]
  ;; when
  [[?n :is :int]])
+
+;; Unconditional   rules   without   logic  variables   just   produce
+;; facts. However these are "output domain" facts, not the same "input
+;; domain" facts as those in ./facts.edn:
+([["text" :is :string]
+  [nil :is nil]])
 
 ;; A (comment  ...) form ist read  literally and is not  understood by
 ;; the defrules-macro. The reader comment works as expected though:

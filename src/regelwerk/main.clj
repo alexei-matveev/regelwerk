@@ -66,7 +66,7 @@
     ;; You may want to compare behaviour of the original and "dressed"
     ;; rules.
     ;;
-    (doseq [facts (take 6 (iterate (dress rules) facts))]
+    (doseq [facts (take 4 (iterate (dress rules) facts))]
       (println facts))))
 
 (defn -main [& args]
