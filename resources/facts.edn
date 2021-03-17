@@ -1,2 +1,5 @@
+;; Fact table. A single row is a  fact. A fact is usually an EAV tuple
+;; with  Entity,  Attribute  and  Value  in  that  order.   Well  yes,
+;; that "EAV" is more of a convention than a hard requirement ...
 [0 :is :int]
 [3.14 :is :double]
