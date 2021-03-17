@@ -19,7 +19,14 @@
 ([["text" :is :string]
   [nil :is nil]])
 
-;; A (comment  ...) form ist read  literally and is not  understood by
-;; the defrules-macro. The reader comment works as expected though:
+;; A  (comment  ...)  form  is  read  literally  and must  be  treated
+;; specially by the "rule compiler".  Not  sure if we should open this
+;; box. Or  we could accept the  inevitable and dispatch on  the first
+;; element like all Lisps do.
+(comment "We could dispatch on the first element ...")
+(comment second third)                  ; length 3, still a comment
+(comment)                               ; length 1, still a comment
+
+;; The reader comment renders the next form practically non-existant:
 #_(comment "Hi!")
 

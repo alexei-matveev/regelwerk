@@ -96,12 +96,24 @@
   ;; This must be also a function of a fact database:
   `(fn [unused-facts#] (set ~expr)))
 
+;; This will also return the unevaled  *code* of the function, not the
+;; actual function:
 (defn- compile-rule [forms]
-  (if (= 1 (count forms))
+  (cond
+    ;; These (comment ...) forms are read as such. Is it too much of a
+    ;; special  case? Or  are  we starting  to  write an  interpreter?
+    ;; FIXME:  one   should  probably  filter  them   out  earlier  in
+    ;; compile-rules instead of producing noop stubs.
+    (= 'comment (first forms))
+    `(constantly #{})
+
     ;; one form => just facts:
+    (= 1 (count forms))
     (let [[expr] forms]
       (do-compile-facts expr))
+
     ;; three forms => regular rule:
+    :else
     (let [[vars expr where] forms]
       (do-compile-rule vars expr where))))
 
