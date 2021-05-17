@@ -9,7 +9,9 @@ facts. No more, no less.
 Another   "weaker"    constraint   of   the   design    was   to   use
 Datalog/Datascript Query  to produce  a "Result  Set" from  the "Input
 Facts" and to  generate the "Output Facts" from the  "Result Set" in a
-sufficiently flexible way.
+sufficiently  flexible  way.   The ``mapcat``-  aka  ``flatMap``-style
+concatenation of the "Output  Facts" independently generated from each
+row of the "Result Set" appeared then to be a natural choice.
 
 ## Build & Deploy to Clojars
 
@@ -20,6 +22,7 @@ With that said, here is the memo:
 
     $ lein clean
     $ lein build
+    $ lein test
     $ lein deploy clojurs
 
 The artifact goes to
