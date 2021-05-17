@@ -1,10 +1,31 @@
-# Trying Macros for Rules
+# Rules:: Facts -> Facts
 
 [![Clojars Project](https://img.shields.io/clojars/v/f0bec0d/regelwerk.svg)](https://clojars.org/f0bec0d/regelwerk)
 
 To keep thing simple and see where it leads us we postulate here that
 a rule or a rule set is just a function of facts producing new
 facts. No more, no less.
+
+Another   "weaker"    constraint   of   the   design    was   to   use
+Datalog/Datascript Query  to produce  a "Result  Set" from  the "Input
+Facts" and to  generate the "Output Facts" from the  "Result Set" in a
+sufficiently flexible way.
+
+## Build & Deploy to Clojars
+
+First you may consider bumping the version in
+``project.clj``. Remember that you cannot overwrite non-SNAPSHOT
+versions and what gets published, stays public. You habe been warned!
+With that said, here is the memo:
+
+    $ lein clean
+    $ lein build
+    $ lein deploy clojurs
+
+The artifact goes to
+[f0becod/regelwerk](https://clojars.org/f0bec0d/regelwerk) repository
+so the user name will be ``f0bec0d``.  The passwort is one of the
+Deploy Tokens generated at Clojars, likely stored in your KeePass.
 
 ## Links
 
