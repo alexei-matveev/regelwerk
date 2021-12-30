@@ -6,15 +6,18 @@
   (testing "Demo for the README ..."
     (let [facts [[1 :is "odd"]
                  [2 :is "even"]]
-          rule (defrule [?number]
-                 ;; For each number produce these facts in German:
-                 [[(inc ?number) :ist "ungerade"]
-                  [(dec ?number) :ist "ungerade"]]
-                 ;; Take only even number from the set of facts in
-                 ;; English:
-                 [[?number :is "even"]])]
+          rule (defrule [?even-number]
+                 ;; For each even number produce these facts in
+                 ;; German:
+                 [[?even-number :ist "gerade"]
+                  [(inc ?even-number) :ist "ungerade"]
+                  [(dec ?even-number) :ist "ungerade"]]
+                 ;; Datalog query for even numbers from the set of
+                 ;; English facts:
+                 [[?even-number :is "even"]])]
       (is (= (rule facts)
              #{[1 :ist "ungerade"]
+               [2 :ist "gerade"]
                [3 :ist "ungerade"]})))))
 
 (deftest test-1

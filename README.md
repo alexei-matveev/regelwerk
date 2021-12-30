@@ -20,20 +20,22 @@ facts and the  output facts, here exemplified by use  of two different
 languages:
 
 ```clojure
-(let [facts [[1 :is "odd"]
-             [2 :is "even"]]
-      rule (defrule [?number]
-              ;; For each number produce these facts in German:
-              [[(inc ?number) :ist "ungerade"]
-               [(dec ?number) :ist "ungerade"]]
-              ;; Take only even number from the set of facts in
-              ;; English:
-              [[?number :is "even"]])]
-  ;; Rules are just functions that take facts ...
-  (rule facts))
-;; =>
-#{[1 :ist "ungerade"]
-  [3 :ist "ungerade"]})))
+    (let [facts [[1 :is "odd"]
+                 [2 :is "even"]]
+          rule (defrule [?even-number]
+                 ;; For each even number produce these facts in
+                 ;; German:
+                 [[?even-number :ist "gerade"]
+                  [(inc ?even-number) :ist "ungerade"]
+                  [(dec ?even-number) :ist "ungerade"]]
+                 ;; Datalog query for even numbers from the set of
+                 ;; English facts:
+                 [[?even-number :is "even"]])]
+      (rule facts))
+     ;; =>
+     #{[1 :ist "ungerade"]
+       [2 :ist "gerade"]
+       [3 :ist "ungerade"]})))
 ```
 
 Still many rule engines insist  on "inserting" the deducted facts into
