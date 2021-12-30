@@ -110,15 +110,14 @@
     (do-compile-rule (:vars form)
                      (:then form)
                      (:when form))
-    ;; Ugls special case. These (comment  ...) forms are read as such.
+    ;; Ugly special case. These (comment  ...) forms are read as such.
     ;; Is it too much of a special  case?  Or are we starting to write
     ;; an  interpreter?  FIXME:  one should  probably filter  them out
     ;; earlier in compile-rules instead of producing noop stubs.
     (= 'comment (first form))
     `(constantly #{})
 
-    ;; Ugly special case.   One expression in list  should evaluate to
-    ;; facts:
+    ;; Ugly special case.  One expression in list evaluates to facts:
     (= 1 (count form))
     (let [[expr] form]
       (do-compile-facts expr))
@@ -128,11 +127,18 @@
     (let [[vars then when] form]
       (do-compile-rule vars then when))))
 
+;; This defrule would not work with a map
 (defmacro defrule [& forms]
   (compile-rule forms))
 
-;; C-u C-x C-e if you want to see the expansion:
+;; C-u C-x C-e if you want to see expansions:
 (comment
+  (compile-rule '{:vars [?a ?b]
+                  :then [[?b ?a]]
+                  :when [[?a :is ?b]]})
+  (compile-rule '([?a ?b]
+                  [[?b ?a]]
+                  [[?a :is ?b]]))
   (macroexpand '(defrule [?a ?b] [[?b ?a]] [[?a :is ?b]])))
 
 ;;
