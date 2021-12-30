@@ -103,29 +103,30 @@
 
 ;; This will also return the unevaled  *code* of the function, not the
 ;; actual function:
-(defn- compile-rule [forms]
+(defn- compile-rule [form]
   (cond
     ;; Case of a map like {:vars [...], :when [...], :then [...]}:
-    (map? forms)
-    (do-compile-rule (:vars forms)
-                     (:then forms)
-                     (:when forms))
-    ;; These (comment ...) forms are read as such. Is it too much of a
-    ;; special  case? Or  are  we starting  to  write an  interpreter?
-    ;; FIXME:  one   should  probably  filter  them   out  earlier  in
-    ;; compile-rules instead of producing noop stubs.
-    (= 'comment (first forms))
+    (map? form)
+    (do-compile-rule (:vars form)
+                     (:then form)
+                     (:when form))
+    ;; Ugls special case. These (comment  ...) forms are read as such.
+    ;; Is it too much of a special  case?  Or are we starting to write
+    ;; an  interpreter?  FIXME:  one should  probably filter  them out
+    ;; earlier in compile-rules instead of producing noop stubs.
+    (= 'comment (first form))
     `(constantly #{})
 
-    ;; one form => just facts:
-    (= 1 (count forms))
-    (let [[expr] forms]
+    ;; Ugly special case.   One expression in list  should evaluate to
+    ;; facts:
+    (= 1 (count form))
+    (let [[expr] form]
       (do-compile-facts expr))
 
-    ;; three forms => regular rule:
+    ;; Regular case. Three expressions in a list => regular rule:
     :else
-    (let [[vars expr where] forms]
-      (do-compile-rule vars expr where))))
+    (let [[vars then when] form]
+      (do-compile-rule vars then when))))
 
 (defmacro defrule [& forms]
   (compile-rule forms))
