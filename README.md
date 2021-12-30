@@ -23,7 +23,7 @@ With that said, here is the memo:
     $ lein clean
     $ lein build
     $ lein test
-    $ lein deploy clojurs
+    $ lein deploy clojars
 
 The artifact goes to
 [f0becod/regelwerk](https://clojars.org/f0bec0d/regelwerk) repository
@@ -36,6 +36,9 @@ Deploy Tokens generated at Clojars, likely stored in your KeePass.
   before even attempting ...
 * See [Datascript](https://github.com/tonsky/datascript) dialect of
   Datalog.
+* [Minikusari](https://github.com/frankiesardo/minikusari) in less two
+  dosen lines of code generates transaction datoms (facts) from the
+  result set of a Datascript query.
 * [naga](https://github.com/quoll/naga) seems to be generating facts
   from rules.
 * [Souffle](https://souffle-lang.github.io/simple) Lang uses plain
