@@ -15,6 +15,10 @@ row of the "Result Set" appeared then to be a natural choice.
 
 ## Example Usage
 
+Note that  it does  not always  make sense  to mix/conflate  the input
+facts and the  output facts, here exemplified by use  of two different
+languages:
+
 ```clojure
 (let [facts [[1 :is "odd"]
              [2 :is "even"]]
@@ -31,6 +35,9 @@ row of the "Result Set" appeared then to be a natural choice.
 #{[1 :ist "ungerade"]
   [3 :ist "ungerade"]})))
 ```
+
+Still many rule engines insist  on "inserting" the deducted facts into
+the database that was "queried".
 
 ## Build & Deploy to Clojars
 
