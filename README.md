@@ -16,8 +16,8 @@ row of the "Result Set" appeared then to be a natural choice.
 ## Example Usage
 
 Note that  it does  not always  make sense  to mix/conflate  the input
-facts and the  output facts, here exemplified by use  of two different
-languages:
+facts and the  output facts, here illustrated by use  of two different
+human languages:
 
 ```clojure
 (let [facts [[1 :is "odd"]
@@ -38,8 +38,8 @@ languages:
   [3 :ist "ungerade"]})))
 ```
 
-Still many rule engines insist  on "inserting" the deducted facts into
-the database that was "queried".
+Still many rule  engines insist on "inserting" deduced  facts into the
+very database that was "queried".
 
 ## Build & Deploy to Clojars
 
