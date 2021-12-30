@@ -209,8 +209,8 @@
       ([?a ?b] [[?a ?b]] [[?a :is ?b]])
       ([?x ?y] [[?y ?x]] [[?x :is ?y]]))))
 
-;; This should read all objects from a strea of edn text. Not just the
-;; first object that is returned bei clojure.edn/read ...
+;; This should  read all objects from  a stream of edn  text. Not just
+;; the first object that is returned bei clojure.edn/read ...
 (defn- read-seq [stream]
   ;; This unique sentinel object will be returned on EOF bei edn/read:
   (let [eof (Object.)]
