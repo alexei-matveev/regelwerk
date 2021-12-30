@@ -92,6 +92,11 @@
              (for [row# rows#]
                (let [~vars row#] ~expr))))))
 
+;; Hm,  these  arity-1  functions  of (unused)  facts  are  not  quite
+;; intuitive. No sane rule will return anything starting from an empty
+;; fact table: (rule  #{}) == #{}, quite intuitively.   But these fact
+;; functions may and will. Think of Clojure function "constantly" that
+;; takes input but ignores it completly. What is the arity-0 for?
 (defn- do-compile-facts [expr]
   ;; This must be also a function of a fact database:
   `(fn [unused-facts#] (set ~expr)))
