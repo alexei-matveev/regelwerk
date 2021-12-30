@@ -13,6 +13,25 @@ sufficiently  flexible  way.   The ``mapcat``-  aka  ``flatMap``-style
 concatenation of the "Output  Facts" independently generated from each
 row of the "Result Set" appeared then to be a natural choice.
 
+## Example Usage
+
+```clojure
+(let [facts [[1 :is "odd"]
+             [2 :is "even"]]
+      rule (defrule [?number]
+              ;; For each number produce these facts in German:
+              [[(inc ?number) :ist "ungerade"]
+               [(dec ?number) :ist "ungerade"]]
+              ;; Take only even number from the set of facts in
+              ;; English:
+              [[?number :is "even"]])]
+  ;; Rules are just functions that take facts ...
+  (rule facts))
+;; =>
+#{[1 :ist "ungerade"]
+  [3 :ist "ungerade"]})))
+```
+
 ## Build & Deploy to Clojars
 
 First you may consider bumping the version in
