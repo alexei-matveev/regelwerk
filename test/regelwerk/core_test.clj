@@ -2,6 +2,21 @@
   (:require [clojure.test :refer :all]
             [regelwerk.core :refer :all]))
 
+(deftest demo-0
+  (testing "Demo for the README ..."
+    (let [facts [[1 :is "odd"]
+                 [2 :is "even"]]
+          rule (defrule [?number]
+                 ;; For each number produce these facts in German:
+                 [[(inc ?number) :ist "ungerade"]
+                  [(dec ?number) :ist "ungerade"]]
+                 ;; Take only even number from the set of facts in
+                 ;; English:
+                 [[?number :is "even"]])]
+      (is (= (rule facts)
+             #{[1 :ist "ungerade"]
+               [3 :ist "ungerade"]})))))
+
 (deftest test-1
   (testing "Function calls in expressions ..."
     (let [rule (defrule [?a ?b]
