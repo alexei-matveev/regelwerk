@@ -100,6 +100,11 @@
 ;; actual function:
 (defn- compile-rule [forms]
   (cond
+    ;; Case of a map like {:vars [...], :when [...], :then [...]}:
+    (map? forms)
+    (do-compile-rule (:vars forms)
+                     (:then forms)
+                     (:when forms))
     ;; These (comment ...) forms are read as such. Is it too much of a
     ;; special  case? Or  are  we starting  to  write an  interpreter?
     ;; FIXME:  one   should  probably  filter  them   out  earlier  in
