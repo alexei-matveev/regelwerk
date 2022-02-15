@@ -49,7 +49,7 @@ versions and what gets published, stays public. You habe been warned!
 With that said, here is the memo:
 
     $ lein clean
-    $ lein build
+    $ lein jar
     $ lein test
     $ lein deploy clojars
 
