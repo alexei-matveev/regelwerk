@@ -48,17 +48,17 @@
 
 
 (deftest test-2
-  (testing "Multiple rules in a single macro call ..."
+  (testing "Multiple rules in a single macro call (map syntax)"
     (let [rules (defrules
-                  ([?a ?b] [[?b ?a]] [[?a :is ?b]])
-                  ([?a ?b] [[?a ?b]] [[?a :is ?b]]))
+                  {:find [?a ?b], :then [[?b ?a]], :when [[?a :is ?b]]}
+                  {:find [?a ?b], :then [[?a ?b]], :when [[?a :is ?b]]})
           facts [[1 :is "odd"]
                  [2 :is "even"]]]
       (is (= (rules facts)
              #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))))
 
 (deftest test-3
-  (testing "Facts and queries for longer rows beyond EAV ..."
+  (testing "Facts and queries for longer rows beyond EAV (list syntax)"
     (let [rules (defrules
                   ([?a ?b] [[?b ?a]] [[?a :is :like ?b]]))
           facts [[1 :is :like "one" :score 42 "many" "more" "attrs"]
@@ -69,11 +69,11 @@
 ;; Do you still hope to be able to extract free logic variables out of
 ;; an arbitrary expression?
 (deftest test-4
-  (testing "Logic variables and bindings in a single expression ..."
+  (testing "Logic variables and bindings in a single expression (map syntax)"
     (let [rules (defrules
-                  ([?a]
-                   [[?a :vs (let [?a (str "p" ?a)] ?a)]]
-                   [[?a]]))
+                  {:find [?a]
+                   :then [[?a :vs (let [?a (str "p" ?a)] ?a)]]
+                   :when [[?a]]})
           facts [[1] [2]]]
       (is (= (rules facts)
              #{[2 :vs "p2"] [1 :vs "p1"]})))))
@@ -83,6 +83,10 @@
     (let [rules (defrules
                   ([[1 :is "odd"]
                     [2 :is "even"]]))
+          rulez (defrules
+                  {:then [[1 :is "odd"]
+                          [2 :is "even"]]})
           facts [[:does] [:not] [:matter]]]
       (is (= (rules facts)
+             (rulez facts)
              #{[1 :is "odd"] [2 :is "even"]})))))
