@@ -7,7 +7,7 @@
 ;; many times yourself. Also the original  facts are in general from a
 ;; "different  domain" so  that you  will  have to  pass them  through
 ;; yourself here or set/union in the code:
-{:vars [?n]
+{:find [?n]
  :then [[(mod (inc ?n) 4) :is :int]
         [(mod (dec ?n) 4) :is :int]]
  :when [[?n :is :int]]}

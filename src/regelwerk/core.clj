@@ -53,11 +53,10 @@
 ;; "body" = "when" & "head" = "then" as in this structure:
 ;;
 ;;   {:then [["water" :is "wet"]]}
-;;   {:vars [?a ?b] :when [[?a :is ?b]] :then [[?a :is "object"]]}
-;;   {:find [?a ?b] :where [[?a :is ?b]] :then [[?b :is "adjective"]]}
+;;   {:find [?a ?b] :when [[?a :is ?b]] :then [[?a :is "object"]]}
 ;;
-;; The latter form  is almost a valid Datascript query,  extended by a
-;; "then" expression.  Maybe  we should stick with  it?  Basically any
+;; The  latter   form  is  almost   a  valid  Datascript   query  with
+;; s/where/when/ and  extended by a "then"  expression.  Basically any
 ;; syntax would encode the same three parts, so why bother?
 ;;
 ;;   (define-rule [?a ?b]
@@ -105,9 +104,9 @@
 ;; actual function:
 (defn- compile-rule [form]
   (cond
-    ;; Case of a map like {:vars [...], :when [...], :then [...]}:
+    ;; Case of a map like {:find [...], :when [...], :then [...]}:
     (map? form)
-    (do-compile-rule (:vars form)
+    (do-compile-rule (:find form)
                      (:then form)
                      (:when form))
     ;; Ugly special case. These (comment  ...) forms are read as such.
@@ -133,7 +132,7 @@
 
 ;; C-u C-x C-e if you want to see expansions:
 (comment
-  (compile-rule '{:vars [?a ?b]
+  (compile-rule '{:find [?a ?b]
                   :then [[?b ?a]]
                   :when [[?a :is ?b]]})
   (compile-rule '([?a ?b]
