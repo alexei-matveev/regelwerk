@@ -1,6 +1,6 @@
-;; Do we really need to put all  arities in a single list? No we dont!
 ;; The reader is supposed to read  all objects from the file an return
-;; a sequence.
+;; a sequence.  Because we dont want  to wrap all rules  into an extra
+;; list or array here.
 
 ;; Note that the rules are not  recursive by themseves. If you want to
 ;; get all integers modulo 4 you have to apply these rules sufficently
@@ -22,7 +22,13 @@
 
 ;; Unconditional   rules   without   logic  variables   just   produce
 ;; facts. However these are "output domain" facts, not the same "input
-;; domain" facts as those in ./facts.edn:
+;; domain" facts  as those in  ./facts.edn. FIXME: these are  ugly and
+;; probably must die.
+{:then
+ [["text" :is :string]
+  [nil :is nil]]}
+
+;; Same as above, redundant because of set semantics:
 ([["text" :is :string]
   [nil :is nil]])
 

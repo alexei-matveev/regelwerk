@@ -106,17 +106,27 @@
   (cond
     ;; Case of a map like {:find [...], :when [...], :then [...]}:
     (map? form)
-    (do-compile-rule (:find form)
-                     (:then form)
-                     (:when form))
-    ;; Ugly special case. These (comment  ...) forms are read as such.
-    ;; Is it too much of a special  case?  Or are we starting to write
-    ;; an  interpreter?  FIXME:  one should  probably filter  them out
-    ;; earlier in compile-rules instead of producing noop stubs.
+    (if-let [vars (:find form)]
+      ;; Regular case with all three clauses:
+      (do-compile-rule vars
+                       (:then form)
+                       (:when form))
+      ;; FIXME: get  rid of  this ugly  special case  for "standalone"
+      ;; unconditional facts.  We even ignore  whetever ist is  in the
+      ;; :when clause here.
+      (do-compile-facts (:then form)))
+
+    ;; Another ugly special  case. These (comment ...)  forms are read
+    ;; as such.  Is it too much of a special case?  Or are we starting
+    ;; to  write an  interpreter?  FIXME:  one should  probably filter
+    ;; them  out earlier  in compile-rules  instead of  producing noop
+    ;; stubs.
     (= 'comment (first form))
     `(constantly #{})
 
-    ;; Ugly special case.  One expression in list evaluates to facts:
+    ;; FIXME:  get  rid of  this  ugly  special case  of  "standalone"
+    ;; unconditional  facts.   One  expression in  list  evaluates  to
+    ;; facts:
     (= 1 (count form))
     (let [[expr] form]
       (do-compile-facts expr))
