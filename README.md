@@ -22,16 +22,17 @@ human languages:
 ```clojure
 (let [facts [[1 :is "odd"]
              [2 :is "even"]]
-      rule (defrule [?even-number]
-             ;; For each even number produce these facts in
-             ;; German:
-             [[?even-number :ist "gerade"]
-              [(inc ?even-number) :ist "ungerade"]
-              [(dec ?even-number) :ist "ungerade"]]
-             ;; Datalog query for even numbers from the set of
-             ;; English facts:
-             [[?even-number :is "even"]])]
-  (rule facts))
+      rules (defrules
+              {:find [?number]
+               ;; For each number produce this set of facts set in
+               ;; German:
+               :then [[?number :ist "gerade"]
+                      [(inc ?number) :ist "ungerade"]
+                      [(dec ?number) :ist "ungerade"]]
+               ;; Restrict to even numbers from the set of English
+               ;; facts by Datalog query:
+               :when [[?number :is "even"]]})]
+  (rules facts))
 ;; =>
 #{[1 :ist "ungerade"]
   [2 :ist "gerade"]
