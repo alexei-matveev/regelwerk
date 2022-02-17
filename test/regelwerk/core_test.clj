@@ -8,7 +8,7 @@
                  [2 :is "even"]]
           rules (defrules
                   {:find [?number]
-                   ;; For each number produce this set of facts set in
+                   ;; For each number produce this set of facts in
                    ;; German:
                    :then [[?number :ist "gerade"]
                           [(inc ?number) :ist "ungerade"]

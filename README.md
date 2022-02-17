@@ -1,4 +1,4 @@
-# Rules:: Facts -> Facts
+# Rules:: Facts -> Facts'
 
 [![Clojars Project](https://img.shields.io/clojars/v/f0bec0d/regelwerk.svg)](https://clojars.org/f0bec0d/regelwerk)
 
@@ -24,7 +24,7 @@ human languages:
              [2 :is "even"]]
       rules (defrules
               {:find [?number]
-               ;; For each number produce this set of facts set in
+               ;; For each number produce this set of facts in
                ;; German:
                :then [[?number :ist "gerade"]
                       [(inc ?number) :ist "ungerade"]
