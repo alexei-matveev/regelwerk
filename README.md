@@ -42,6 +42,16 @@ human languages:
 Still many rule  engines insist on "inserting" deduced  facts into the
 very database that was "queried".
 
+## Next Level: Lamda Calculus with Sets of Facts
+
+Composable Programs with "Rules" operating on "Sets of Facts".
+Alternative N-ary Rules taking zero, one or more "Sets of Facts"
+as arguments and producing even more of that:
+
+    Rules:: Facts1 -> Facts2 -> ... -> FactsN
+
+Think of `select ... from facts1 join facts2 ...`.
+
 ## Build & Deploy to Clojars
 
 First you may consider bumping the version in
