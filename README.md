@@ -44,13 +44,17 @@ very database that was "queried".
 
 ## Next Level: Lamda Calculus with Sets of Facts
 
-Composable Programs with "Rules" operating on "Sets of Facts".
-Alternative N-ary Rules taking zero, one or more "Sets of Facts"
+Would such a Calculus be useful or ist just a mind gymnastics?
+Think of composable programs with "Rules" operating on "Sets of Facts".
+Think of alternative N-ary Rules taking zero, one or more "Sets of Facts"
 as arguments and producing even more of that:
 
     Rules:: Facts1 -> Facts2 -> ... -> FactsN
 
 Think of `select ... from facts1 join facts2 ...`.
+Or ist it a `join` bad analogy because it is too "cartesian"?
+What kind of expressions besides function application should
+be allowed? Some set operations like Union and Diff? Joins?
 
 ## Build & Deploy to Clojars
 
