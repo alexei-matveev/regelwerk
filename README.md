@@ -44,7 +44,8 @@ very database that was "queried".
 
 ## Next Level: Lamda Calculus with Sets of Facts
 
-Would such a calculus be useful  or is it just mind gymnastics?  Think
+Would   such   a   calculus   be   useful   or   is   it   just   mind
+[gymnastics](https://en.wikipedia.org/wiki/Relational_algebra)?  Think
 of  composable programs  with "Rules"  operating on  "Sets of  Facts".
 Think  of N-ary  Rules taking  zero, one  or more  "Sets of  Facts" as
 arguments and producing even more of that as a result:
