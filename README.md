@@ -44,20 +44,22 @@ very database that was "queried".
 
 ## Next Level: Lamda Calculus with Sets of Facts
 
-Would   such   a   calculus   be   useful   or   is   it   just   mind
-[gymnastics](https://en.wikipedia.org/wiki/Relational_algebra)?  Think
-of  composable programs  with "Rules"  operating on  "Sets of  Facts".
-Think  of N-ary  Rules taking  zero, one  or more  "Sets of  Facts" as
-arguments and producing even more of that as a result:
+Would such a calculus be useful or is it just mind gymnastics just to
+reinvent the
+[wheel](https://en.wikipedia.org/wiki/Relational_algebra)?  Think of
+composable programs with "Rules" operating on "Sets of Facts".  Think
+of N-ary Rules taking zero, one or more "Sets of Facts" as arguments
+and producing even more of that as a result:
 
     Rules:: Facts1 -> Facts2 -> ... -> FactsN
 
 Think of  `select ... from  facts1 join facts2  ...`.  Or is  a `join`
 rather  bad analogy  because  it  is too  "cartesian"?   What kind  of
-expressions besides  function application should be  allowed? Some set
-operations like  union and  diff? Joins?   A plain  irreversible union
-that trows facts of different domains  in a single pot/set is probably
-not a good idea type-wise.
+expressions besides  function application should be  allowed? In other
+words,  what are  the built-ins?  Some set  operations like  union and
+diff?   Joins?   A  plain  irreversible  union  that  trows  facts  of
+different domains  in a  single pot/set  is probably  not a  good idea
+type-wise.
 
 ## Build & Deploy to Clojars
 
