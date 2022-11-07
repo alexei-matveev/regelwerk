@@ -83,9 +83,18 @@ Deploy Tokens generated at Clojars, likely stored in your KeePass.
   [engine](https://github.com/jimmyhmiller/one-hundred-lines-or-less/tree/master/libraries/clojure/query-engine/src/query_engine)
 * [Meander](https://github.com/noprompt/meander)
 
+Maybe an interesting read:
+
+* [Is Datalog a good language for
+  authorization?](https://neilmadden.blog/2022/02/19/is-datalog-a-good-language-for-authorization/)
+  and the HN
+  [discussion](https://news.ycombinator.com/item?id=30400886)
+* [Fixpoints for the Masses:
+  Programming with First-Class Datalog Constraints](https://dl.acm.org/doi/pdf/10.1145/3428193) proposes composable Datalog programs as Data.
+
 ## License
 
-Copyright © 2020 Alexei Matveev <alexei.matveev@gmail.com>
+Copyright © 2022 Alexei Matveev <alexei.matveev@gmail.com>
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
