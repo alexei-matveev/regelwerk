@@ -8,11 +8,11 @@
 ;; [$a $b]  and refer to  the databases as  [$a $b] inside  the quoted
 ;; query. But we can and do.
 ;;
-;; The function "f" ist a funciton of two datasets, $a and $b. But the
-;; declaration or definition of the  function involves a DS-Query with
-;; what we callt rule-variable ?v.
+;; The function "f" ist a function of two datasets, $a and $b. But the
+;; declaration of the function involves a DS-Query with what we called
+;; a rule-variable ?v.
 (defn- f [$a $b]
-  (d/q '{:find [?v]
+  (d/q '{:find [?v]                     ; then return #{[?v]}
          :in [$a $b]
          :where [[$a ?v :eq 0]
                  [$b ?v :eq 0]]}
@@ -24,11 +24,11 @@
 ;; correspondig  number  of  datasets  like  above.   This  should  be
 ;; functionally equivalent with the "defn" of "f" above:
 (comment
-  (defrules {:in [$a $b]
-             :find [?v]
-             :when [[$a ?v :eq 0]
-                    [$b ?v :eq 0]]
-             :then [[?v]]}))
+  (defrule {:in [$a $b]                ; defines the arity of the rule
+            :find [?v]                 ; rows of the query result set
+            :when [[$a ?v :eq 0]
+                   [$b ?v :eq 0]]
+            :then [[?v]]}))             ; rows of rule-output
 
 
 (defn- binary []
