@@ -46,10 +46,11 @@ very database that was "queried".
 
 Would such a calculus be useful or is it just mind gymnastics just to
 [reinvent](https://en.wikipedia.org/wiki/Language_Integrated_Query)
-the [wheel](https://en.wikipedia.org/wiki/Relational_algebra)?  Think
-of composable programs with "Rules" operating on "Sets of Facts".
-Think of N-ary Rules taking zero, one or more "Sets of Facts" as
-arguments and producing even more of that as a result:
+[the](https://www.w3.org/TR/rdf-mt/#rules)
+[wheel](https://en.wikipedia.org/wiki/Relational_algebra)?  Think of
+composable programs with "Rules" operating on "Sets of Facts".  Think
+of N-ary Rules taking zero, one or more "Sets of Facts" as arguments
+and producing even more of that as a result:
 
     Rules:: Facts1 -> Facts2 -> ... -> FactsN
 
@@ -82,6 +83,9 @@ Deploy Tokens generated at Clojars, likely stored in your KeePass.
 
 * Maybe one shlould read [PAIP](https://github.com/norvig/paip-lisp)
   before even attempting ...
+* The whole RDF Subject and
+  [inference](https://jena.apache.org/documentation/inference/) is
+  huge to swallow.
 * See [Datascript](https://github.com/tonsky/datascript) dialect of
   Datalog.
 * [Minikusari](https://github.com/frankiesardo/minikusari) in less two
