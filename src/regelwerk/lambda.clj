@@ -28,7 +28,15 @@
             :find [?v]                 ; rows of the query result set
             :when [[$a ?v :eq 0]
                    [$b ?v :eq 0]]
-            :then [[?v]]}))             ; rows of rule-output
+            :then [[?v]]})              ; rows of rule-output
+
+  ;; Implicit IN-Clause,  but the  Map is  not quite  a self-contained
+  ;; Datalog Query. This is less suitable for "rules as data".
+  (defrule [$a $b]
+    {:find [?v]
+     :when [[$a ?v :eq 0]
+            [$b ?v :eq 0]]
+     :then [[?v]]}))
 
 
 (defn- binary []
