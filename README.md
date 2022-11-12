@@ -45,11 +45,11 @@ very database that was "queried".
 ## Next Level: Lamda Calculus with Sets of Facts
 
 Would such a calculus be useful or is it just mind gymnastics just to
-reinvent the
-[wheel](https://en.wikipedia.org/wiki/Relational_algebra)?  Think of
-composable programs with "Rules" operating on "Sets of Facts".  Think
-of N-ary Rules taking zero, one or more "Sets of Facts" as arguments
-and producing even more of that as a result:
+[reinvent](https://en.wikipedia.org/wiki/Language_Integrated_Query)
+the [wheel](https://en.wikipedia.org/wiki/Relational_algebra)?  Think
+of composable programs with "Rules" operating on "Sets of Facts".
+Think of N-ary Rules taking zero, one or more "Sets of Facts" as
+arguments and producing even more of that as a result:
 
     Rules:: Facts1 -> Facts2 -> ... -> FactsN
 
