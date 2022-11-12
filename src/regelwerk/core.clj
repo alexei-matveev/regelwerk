@@ -48,16 +48,17 @@
 ;;     head body vars
 ;;
 ;; One might  start to think of  rules as plain data  with essentially
-;; three  blocks:   generated  facts,   conditions,  and   mostly  for
-;; technichal reasons a vector of variables.   It may help to think of
-;; "body" = "when" & "head" = "then" as in this structure:
+;; three  blocks:  generated  facts  aka  consequent,  conditions  aka
+;; antecedents,  and  mostly  for  technichal  reasons,  a  vector  of
+;; variables.  It  may help  to think  of "body" =  "when" &  "head" =
+;; "then" as in this structure:
 ;;
-;;   {:then [["water" :is "wet"]]}
-;;   {:find [?a ?b] :when [[?a :is ?b]] :then [[?a :is "object"]]}
+;;   {:find [?a ?b] :when [[?a :is ?b]] :then [[?a :is "thing"]]}
+;;   {:then [["water" :is "wet"]]}   ;; But see the empty graph lemma!
 ;;
-;; The  latter   form  is  almost   a  valid  Datascript   query  with
-;; s/where/when/ and  extended by a "then"  expression.  Basically any
-;; syntax would encode the same three parts, so why bother?
+;; The former  is almost a  valid Datascript query  with s/where/when/
+;; and extended  by a "then"  expression.  Basically any  syntax would
+;; encode the same three parts, so why bother?
 ;;
 ;;   (define-rule [?a ?b]
 ;;     [[?a :is ?b]] => [[:a ?a :b ?b]])
