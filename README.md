@@ -24,14 +24,14 @@ human languages:
              [2 :is "even"]]
       rules (defrules
               {:find [?number]
+               ;; But only even numbers from the set of English
+               ;; facts by Datalog query:
+               :when [[?number :is "even"]]
                ;; For each number produce this set of facts in
                ;; German:
                :then [[?number :ist "gerade"]
                       [(inc ?number) :ist "ungerade"]
-                      [(dec ?number) :ist "ungerade"]]
-               ;; Restrict to even numbers from the set of English
-               ;; facts by Datalog query:
-               :when [[?number :is "even"]]})]
+                      [(dec ?number) :ist "ungerade"]]})]
   (rules facts))
 ;; =>
 #{[1 :ist "ungerade"]
