@@ -112,8 +112,13 @@
                        (:then form)
                        (:when form))
       ;; FIXME: get  rid of  this ugly  special case  for "standalone"
-      ;; unconditional facts.  We even ignore  whetever ist is  in the
-      ;; :when clause here.
+      ;; unconditional facts.   We even ignore  whetever it is  in the
+      ;; when clause here.  See "Empty  Graph Lemma": The empty set of
+      ;; triples is  entailed by  any graph, and  does not  entail any
+      ;; graph except itself [1]. This basically means en empty set of
+      ;; facts does not allow anything to be derived from it!
+      ;;
+      ;; [1] https://www.w3.org/TR/rdf-mt/#entail
       (do-compile-facts (:then form)))
 
     ;; Another ugly special  case. These (comment ...)  forms are read
