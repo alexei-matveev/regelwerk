@@ -20,7 +20,7 @@
        $b))
 
 ;; The  next evolution  of the  macro should  thus be  able to  take a
-;; Datalog  query with  an IN-clause  and define  the function  of the
+;; Datalog query with an IN/FROM-clause and define the function of the
 ;; correspondig  number  of  datasets  like  above.   This  should  be
 ;; functionally equivalent with the "defn" of "f" above:
 (comment
@@ -30,8 +30,19 @@
                    [$b ?v :eq 0]]
             :then [[?v]]})              ; rows of rule-output
 
+  ;; With SQL/LINQ flavored IN/FROM-Clause:
+  (defrule {:from [$a $b]
+            :find [?v]
+            :when [[$a ?v :eq 0]
+                   [$b ?v :eq 0]]
+            :then [[?v]]})
+
   ;; Implicit IN-Clause,  but the  Map is  not quite  a self-contained
-  ;; Datalog Query. This is less suitable for "rules as data".
+  ;; Datalog Query. This is less suitable  for "rules as data". On the
+  ;; other  hand if  you  really  go all  the  way  defining Rules  of
+  ;; different arity taking  different datasets, the case  of a single
+  ;; file with single purpose rule set will likely be the rare special
+  ;; case.
   (defrule [$a $b]
     {:find [?v]
      :when [[$a ?v :eq 0]
