@@ -12,14 +12,6 @@
         [(mod (dec ?n) 4) :is :int]]
  :when [[?n :is :int]]}
 
-;; Identical  to the  above, thus  redundant, but  because of  the Set
-;; semantics of facts, does no harm except of producing extra heat:
-([?n]
- [[(mod (inc ?n) 4) :is :int]
-  [(mod (dec ?n) 4) :is :int]]
- ;; when
- [[?n :is :int]])
-
 ;; Unconditional   rules   without   logic  variables   just   produce
 ;; facts. However these are "output domain" facts, not the same "input
 ;; domain" facts  as those in  ./facts.edn. FIXME: these are  ugly and
@@ -27,18 +19,6 @@
 {:then
  [["text" :is :string]
   [nil :is nil]]}
-
-;; Same as above, redundant because of set semantics:
-([["text" :is :string]
-  [nil :is nil]])
-
-;; A  (comment  ...)  form  is  read  literally  and must  be  treated
-;; specially by the "rule compiler".  Not  sure if we should open this
-;; box. Or  we could accept the  inevitable and dispatch on  the first
-;; element like all Lisps do.
-(comment "We could dispatch on the first element ...")
-(comment second third)                  ; length 3, still a comment
-(comment)                               ; length 1, still a comment
 
 ;; The reader comment renders the next form practically non-existant:
 #_(comment "Hi!")
