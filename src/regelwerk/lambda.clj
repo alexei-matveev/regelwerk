@@ -59,18 +59,24 @@
 
 (binary) ;; => #{["y"]}
 
-;; This will  return the  *code* for  the rule  as function  of facts,
-;; hence tha name:
+;; This will return the *code* of a  function for use in a macro or in
+;; an eval. Hence the name:
 (defn- compile-rule [rule]
   (let [from (:from rule)               ; maybe nil
         vars (:find rule)
         expr (:then rule)
         when (:when rule)]
-    ;; This will be a function one or more datasets sometime:
-    `(fn [facts#]
+    ;; It will be a function one  or more datasets.  As declared, this
+    ;; function  accepts arbitrary  number of  datasets.  However  the
+    ;; Datalog  query in  the body  may  complain about  "Too few"  or
+    ;; "Extra"  inputs  if   the  number  does  not   agree  with  the
+    ;; declarations in the IN/FROM-clause.
+    `(fn [& args#]
        ;; Datascript appears to handle the case of nil for the
        ;; IN-clause just OK:
-       (let [rows# (d/q '{:find ~vars, :in ~from, :where ~when} facts#)]
+       (let [rows# (apply d/q
+                          '{:find ~vars, :in ~from, :where ~when}
+                          args#)]
          ;; Generate another set of objects from the supplied collection
          ;; valued  expression binding  each row  of the  result set  to
          ;; variables  of a  vector.   Clojure indeed  allows binding  a
@@ -80,16 +86,27 @@
                (for [row# rows#]
                  (let [~vars row#] ~expr)))))))
 
-(defmacro defrule [map]
-  (compile-rule map))
+;; Rule is a map with at  least find-, when-, and then-clauses.  Rules
+;; involving multiple datasets must supply a from-clause too:
+(defmacro defrule [rule]
+  (compile-rule rule))
 
-(let [r1 (defrule {:from [$t]
+(let [r1 (defrule {:from [$u]
                    :find [?a ?b]
-                   :when [[$t ?a :is ?b]]
+                   :when [[$u ?a :is ?b]]
                    :then [[?b :eq ?a]]})
       r2 (defrule {:find [?a ?b]
                    :when [[?a :is ?b]]
                    :then [[?b :eq ?a]]})
-      t [["a" :is 1]
-         ["b" :is 2]]]
-  (r2 t))
+      r3 (defrule {:from [$u $v]
+                   :find [?x ?y]
+                   :when [[$u ?x :is ?z]
+                          [$v ?y :is ?z]]
+                   :then [[?x :eq ?y]]})
+      u [["a" :is 1]
+         ["b" :is 2]]
+      v [["A" :is 1]
+         ["B" :is 2]]]
+  {:r1 (r1 u)
+   :r2 (r2 v)
+   :r3 (r3 u v)})
