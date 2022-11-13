@@ -225,14 +225,14 @@
 ;; expression itself. The  length of lists in  the sequence "artities"
 ;; will  thus  be  typicall  3  and somtimes  1.   The  working  horse
 ;; "compile-rule" is supposed to handle both cases accordingly.
-(defn- compile-rules [arities]
-  (let [fs (map compile-rule arities)]
+(defn- compile-rules [rules]
+  (let [fs (map compile-rule rules)]
     `(fn [facts#]
        (into #{} cat (for [f# [~@fs]]
                        (f# facts#))))))
 
-(defmacro defrules [& arities]
-  (compile-rules arities))
+(defmacro defrules [& rules]
+  (compile-rules rules))
 
 ;; C-u C-x C-e if you want to see the expansion:
 (comment
@@ -270,8 +270,8 @@
 ;; produces  "rules-as-a-function" basically  in the  same way  as the
 ;; macro "defrules", albeit at run time.
 (defn load-rules [source]
-  (let [arities (slurp-edn source)
-        code `(defrules ~@arities)]
+  (let [rules (slurp-edn source)
+        code `(defrules ~@rules)]
     (eval code)))
 
 ;; For completness we provide read-facts too. Facts should preferrably
