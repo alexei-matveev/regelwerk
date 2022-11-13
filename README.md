@@ -120,11 +120,12 @@ Maybe an interesting read:
 Some future version 0.0.X:
 
 * Rules involving more than one dataset: `{:from [$a $b], :when [[$a
-  ...], [$b ...]]}`.
-* BREAKING: Some next version will no more accept list-syntax for
-  rules. Convert the lists to maps with `:find`, `:then`, and `:when`
-  keys in that sequence.
-* BREAKING: A rule that returns any facts derived from an empty
+  ...], [$b ...]], :then [...]}`.
+* BREAKING: no more list-syntax for rules. Convert the lists to maps
+  with `:find`, `:then`, and `:when` keys in that sequence.
+* BREAKING: Singular form `(defrule vars expr where)` is no more
+  supported. Use maps instead.
+* DEPRECATED: A rule that returns any facts derived from an empty
   dataset likely violates "empty graph lemma". Therefore the special
   case of `{:then [...]}` akin to `(constantly [...])` that returns
   fact no matter what must go. In the unlikely case that this edge
