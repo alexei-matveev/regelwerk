@@ -23,11 +23,11 @@
 
 (deftest test-1
   (testing "Function calls in expressions ..."
-    (let [rule (defrule [?a ?b]
-                 [[?b :x ?a]
-                  [?a :y (clojure.string/upper-case ?b)]]
-                 ;; <-
-                 [[?a :is ?b]])
+    (let [rule (defrules
+                 {:find [?a ?b]
+                  :then [[?b :x ?a]
+                         [?a :y (clojure.string/upper-case ?b)]]
+                  :when [[?a :is ?b]]})
           facts [[1 :is "odd"]
                  [2 :is "even"]]]
       (is (= (rule facts)
@@ -38,10 +38,10 @@
     (let [f (fn [a b]
               [[b :x a]
                [a :y (clojure.string/upper-case b)]])
-          rule (defrule [?a ?b]
-                 (f ?a ?b)
-                 ;; <-
-                 [[?a :is ?b]])
+          rule (defrules
+                 {:find [?a ?b]
+                  :then (f ?a ?b)
+                  :when [[?a :is ?b]]})
           facts [[1 :is "odd"]
                  [2 :is "even"]]]
       (is (= (rule facts)
@@ -49,7 +49,7 @@
 
 
 (deftest test-2
-  (testing "Multiple rules in a single macro call (map syntax)"
+  (testing "Multiple rules in a single macro call ..."
     (let [rules (defrules
                   {:find [?a ?b], :then [[?b ?a]], :when [[?a :is ?b]]}
                   {:find [?a ?b], :then [[?a ?b]], :when [[?a :is ?b]]})
@@ -59,9 +59,11 @@
              #{[1 "odd"] ["odd" 1] [2 "even"] ["even" 2]})))))
 
 (deftest test-3
-  (testing "Facts and queries for longer rows beyond EAV (list syntax)"
+  (testing "Facts and queries for longer rows beyond EAV triples ..."
     (let [rules (defrules
-                  ([?a ?b] [[?b ?a]] [[?a :is :like ?b]]))
+                  {:find [?a ?b]
+                   :then [[?b ?a]]
+                   :when [[?a :is :like ?b]]})
           facts [[1 :is :like "one" :score 42 "many" "more" "attrs"]
                  [2 :is :like "two" :score 99]]]
       (is (= (rules facts)
