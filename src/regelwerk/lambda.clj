@@ -59,26 +59,18 @@
 
 (binary) ;; => #{["y"]}
 
-
-;; This  will  return   the  *code*  for  the  rule   as  function  of
-;; facts. People tend to call it compilaiton, that is why the name:
+;; This will  return the  *code* for  the rule  as function  of facts,
+;; hence tha name:
 (defn- compile-rule [rule]
-  (let [vars (:find rule)
+  (let [from (:from rule)               ; maybe nil
+        vars (:find rule)
         expr (:then rule)
-        where (:when rule)]
-    ;; This will be a function of a fact database:
+        when (:when rule)]
+    ;; This will be a function one or more datasets sometime:
     `(fn [facts#]
-       ;; Compute the  result set by  querieng facts with  Datascript. A
-       ;; Datascript  DB can  be as  simple as  a collection  of tuples,
-       ;; mostly  EAV-tuples. The  map-form of  the Datascript  query is
-       ;; more  readable  for  machines, no  need  for  unquote-splicing
-       ;; either.  FWIW,  the Datascript  syntax does  not seem  to make
-       ;; sense without vars. So that the rules with empty list of logic
-       ;; variables do  not compile  at the moment.   FIXME: how  do you
-       ;; check for an existing EAV fact with concrete E, A and V in the
-       ;; DB and generate  new facts depending on  its existence?  Think
-       ;; of "conditional facts" as opposed to "unconditional facts".
-       (let [rows# (d/q '{:find ~vars, :where ~where} facts#)]
+       ;; Datascript appears to handle the case of nil for the
+       ;; IN-clause just OK:
+       (let [rows# (d/q '{:find ~vars, :in ~from, :where ~when} facts#)]
          ;; Generate another set of objects from the supplied collection
          ;; valued  expression binding  each row  of the  result set  to
          ;; variables  of a  vector.   Clojure indeed  allows binding  a
@@ -91,9 +83,13 @@
 (defmacro defrule [map]
   (compile-rule map))
 
-(let [r (defrule {:find [?a ?b]
-                  :when [[?a :is ?b]]
-                  :then [[?b :eq ?a]]})
+(let [r1 (defrule {:from [$t]
+                   :find [?a ?b]
+                   :when [[$t ?a :is ?b]]
+                   :then [[?b :eq ?a]]})
+      r2 (defrule {:find [?a ?b]
+                   :when [[?a :is ?b]]
+                   :then [[?b :eq ?a]]})
       t [["a" :is 1]
          ["b" :is 2]]]
-  (r t))
+  (r2 t))
