@@ -60,12 +60,6 @@
 ;; and extended  by a "then"  expression.  Basically any  syntax would
 ;; encode the same three parts, so why bother?
 ;;
-;;   (define-rule [?a ?b]
-;;     [[?a :is ?b]] => [[:a ?a :b ?b]])
-;;
-;;   (define-rule named-rule [?a ?b]
-;;     [[?a :is ?b]] => [[:a ?a :b ?b]])
-;;
 
 ;; This  will  return   the  *code*  for  the  rule   as  function  of
 ;; facts. People tend to call it compilaiton, that is why the name:
@@ -179,44 +173,11 @@
 ;;   facts". Inserting new facts into existing DB kind of assumes that
 ;;   range and domain are identical. This is a serious assumption.
 ;;
-
-;;
-;; It will rarely stay  by one rule. Do we need a  macro for that? The
-;; simplest  extension is  to accept  a  list of  3-tuples (vars  head
-;; body).  This could  be one of the possible syntaxes  -- if you dont
-;; enclose head  and body into  extra praens  [] you need  a separator
-;; like :- or <- between them:
-;;
-(comment
-  (define-rule [?x ?y]
-    [?x :eq ?y] <- [?x :eq ?t] [?t :eq ?y])
-
-  (define-rule [?x ?y]
-    [?x :eq ?y] [?y :eq ?x] <- [?x :eq ?t] [?t :eq ?y])
-
-  (define-rule []
-    [1 :eq "one"]
-    ["two" :eq 2])
-
-  (define-rules
-    ([?a ?b]
-     [?b :eq ?a] <- [?a :eq ?b])
-
-    ;; Two facts in the head:
-    ([?a ?b]
-     [?a :eq ?b] [?b :eq ?a] <- [?a :le ?b] [?b :le ?a])
-
-    ;; This  is how  a  "rule  without body"  aka  "facts" could  look
-    ;; like. Is it worth it?
-    ([]
-     [1 :eq "one"]
-     [2 :eq "two"])))
-
-;; Other rule engines  will probably want to get  all rule definitions
-;; at once in  order to apply optimizations when  transforming them to
-;; code.  We are not that sophisticated and "compile" rules one by one
-;; here.  But  this is likely  better suited to  become a part  of the
-;; public interface.
+;; It will rarely stay by one  rule.  Other rule engines will probably
+;; want  to  get all  rule  definitions  at  once  in order  to  apply
+;; optimizations  when transforming  them to  code.  We  are not  that
+;; sophisticated and  "compile" rules  one by one  here.  But  this is
+;; likely better suited to become a part of the public interface.
 ;;
 ;; Normally the rule consists of  variable vector, an expression and a
 ;; where query --- a  list of three forms. However we  want to be able
