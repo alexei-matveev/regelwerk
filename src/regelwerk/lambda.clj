@@ -62,33 +62,31 @@
 
 ;; This  will  return   the  *code*  for  the  rule   as  function  of
 ;; facts. People tend to call it compilaiton, that is why the name:
-(defn- do-compile-rule [vars expr where]
-  ;; This will be a function of a fact database:
-  `(fn [facts#]
-     ;; Compute the  result set by  querieng facts with  Datascript. A
-     ;; Datascript  DB can  be as  simple as  a collection  of tuples,
-     ;; mostly  EAV-tuples. The  map-form of  the Datascript  query is
-     ;; more  readable  for  machines, no  need  for  unquote-splicing
-     ;; either.  FWIW,  the Datascript  syntax does  not seem  to make
-     ;; sense without vars. So that the rules with empty list of logic
-     ;; variables do  not compile  at the moment.   FIXME: how  do you
-     ;; check for an existing EAV fact with concrete E, A and V in the
-     ;; DB and generate  new facts depending on  its existence?  Think
-     ;; of "conditional facts" as opposed to "unconditional facts".
-     (let [rows# (d/q '{:find ~vars, :where ~where} facts#)]
-       ;; Generate another set of objects from the supplied collection
-       ;; valued  expression binding  each row  of the  result set  to
-       ;; variables  of a  vector.   Clojure indeed  allows binding  a
-       ;; vector of values to vector of  symbols --- a special case of
-       ;; "destructuring bind", so it is called, I think.
-       (into #{} cat       ; transducer works as (reduce into #{} ...)
-             (for [row# rows#]
-               (let [~vars row#] ~expr))))))
-
-(defn- compile-rule [map]
-  (do-compile-rule (:find map)
-                   (:then map)
-                   (:when map)))
+(defn- compile-rule [rule]
+  (let [vars (:find rule)
+        expr (:then rule)
+        where (:when rule)]
+    ;; This will be a function of a fact database:
+    `(fn [facts#]
+       ;; Compute the  result set by  querieng facts with  Datascript. A
+       ;; Datascript  DB can  be as  simple as  a collection  of tuples,
+       ;; mostly  EAV-tuples. The  map-form of  the Datascript  query is
+       ;; more  readable  for  machines, no  need  for  unquote-splicing
+       ;; either.  FWIW,  the Datascript  syntax does  not seem  to make
+       ;; sense without vars. So that the rules with empty list of logic
+       ;; variables do  not compile  at the moment.   FIXME: how  do you
+       ;; check for an existing EAV fact with concrete E, A and V in the
+       ;; DB and generate  new facts depending on  its existence?  Think
+       ;; of "conditional facts" as opposed to "unconditional facts".
+       (let [rows# (d/q '{:find ~vars, :where ~where} facts#)]
+         ;; Generate another set of objects from the supplied collection
+         ;; valued  expression binding  each row  of the  result set  to
+         ;; variables  of a  vector.   Clojure indeed  allows binding  a
+         ;; vector of values to vector of  symbols --- a special case of
+         ;; "destructuring bind", so it is called, I think.
+         (into #{} cat     ; transducer works as (reduce into #{} ...)
+               (for [row# rows#]
+                 (let [~vars row#] ~expr)))))))
 
 (defmacro defrule [map]
   (compile-rule map))
