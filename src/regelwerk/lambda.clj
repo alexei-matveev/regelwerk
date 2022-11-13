@@ -6,10 +6,8 @@
 ;; This will return the *code* of a  function for use in a macro or in
 ;; an eval. Hence the name:
 (defn- compile-rule [rule]
-  (let [from (:from rule)               ; maybe nil
-        vars (:find rule)
-        expr (:then rule)
-        when (:when rule)]
+  ;; (:from rule) may be nil:
+  (let [{from :from, vars :find, expr :then, when :when} rule]
     ;; It will be a function one  or more datasets.  As declared, this
     ;; function  accepts arbitrary  number of  datasets.  However  the
     ;; Datalog  query in  the body  may  complain about  "Too few"  or
