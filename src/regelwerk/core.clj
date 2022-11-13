@@ -142,19 +142,21 @@
     (let [[vars then when] form]
       (do-compile-rule vars then when))))
 
-;; This defrule would not work with a map
+;; FIXME: This defrule does not work with a map
 (defmacro defrule [& forms]
   (compile-rule forms))
 
 ;; C-u C-x C-e if you want to see expansions:
 (comment
-  (compile-rule '{:find [?a ?b]
-                  :then [[?b ?a]]
-                  :when [[?a :is ?b]]})
-  (compile-rule '([?a ?b]
-                  [[?b ?a]]
-                  [[?a :is ?b]]))
-  (macroexpand '(defrule [?a ?b] [[?b ?a]] [[?a :is ?b]])))
+  (compile-rule
+   '{:find [?a ?b]
+     :then [[?b ?a]]
+     :when [[?a :is ?b]]})
+  ;; FIXME: This defrule does not work with a map
+  (macroexpand
+   '(defrule {:find [?a ?b]
+              :then [[?b ?a]]
+              :when [[?a :is ?b]]})))
 
 ;;
 ;; That (into #{} ...) in the  compile-rule code for the new generated
@@ -236,10 +238,8 @@
 (comment
   (macroexpand
    '(defrules
-      ;; vars |  head   |  body
-      ;;------|---------|------------
-      ([?a ?b] [[?a ?b]] [[?a :is ?b]])
-      ([?x ?y] [[?y ?x]] [[?x :is ?y]]))))
+      {:find [?a ?b], :then [[?a ?b]], :when [[?a :is ?b]]}
+      {:find [?x ?y], :then [[?y ?x]], :when [[?x :is ?y]]})))
 
 ;; This should  read all objects from  a stream of edn  text. Not just
 ;; the first object that is returned bei clojure.edn/read ...
