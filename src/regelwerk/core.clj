@@ -28,8 +28,8 @@
             [clojure.edn :as edn]))
 
 ;;
-;; Many possible syntaxes for rules  are possible to choose from. This
-;; is probably  the case  when the  choice is  bad.  Maybe  one should
+;; Many  syntaxes for  rules  are  possible to  choose  from. This  is
+;; probably  the  case when  the  choice  is  bad.  Maybe  one  should
 ;; postulate that a "rule without body is a fact"?  "A fact is true no
 ;; matter what", like PAIP says.  This could limit the choises for the
 ;; "most parctical" syntax  by e.g.  favoring the  "head first" syntax
@@ -38,20 +38,13 @@
 ;;      Fact.
 ;;      Head (Vars) <- Body (Vars).
 ;;
-;; There is only six permutations.
-;;
-;;     vars head body <- current
-;;     vars body head <- does not reduce to fact with empty body?
-;;     body head vars
-;;     body vars head
-;;     head vars body
-;;     head body vars
-;;
-;; One might  start to think of  rules as plain data  with essentially
-;; three  blocks:  generated  facts  aka  consequent,  conditions  aka
-;; antecedents,  and  mostly  for  technichal  reasons,  a  vector  of
-;; variables.  It  may help  to think  of "body" =  "when" &  "head" =
-;; "then" as in this structure:
+;; We try to think  of rules as plain data with  Vars, Head, and Body.
+;; There are six  permutations of those three  building blocks.  Maybe
+;; we should not even try to choose an order and just give them names?
+;; These three blocks are:  generated facts aka consequent, conditions
+;; aka antecedents,  and mostly  for technichal  reasons, a  vector of
+;; variables.   Here is  a structure  with three  blocks and  "catchy"
+;; 4-letter names:
 ;;
 ;;   {:find [?a ?b] :when [[?a :is ?b]] :then [[?a :is "thing"]]}
 ;;   {:then [["water" :is "wet"]]}   ;; But see the empty graph lemma!
