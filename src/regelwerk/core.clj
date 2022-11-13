@@ -129,9 +129,9 @@
     (let [[vars then when] form]
       (do-compile-rule vars then when))))
 
-;; FIXME: This defrule does not work with a map
-(defmacro defrule [& forms]
-  (compile-rule forms))
+;; This defrule only works with a map:
+(defmacro defrule [rule]
+  (compile-rule rule))
 
 ;; C-u C-x C-e if you want to see expansions:
 (comment
@@ -139,7 +139,6 @@
    '{:find [?a ?b]
      :then [[?b ?a]]
      :when [[?a :is ?b]]})
-  ;; FIXME: This defrule does not work with a map
   (macroexpand
    '(defrule {:find [?a ?b]
               :then [[?b ?a]]
