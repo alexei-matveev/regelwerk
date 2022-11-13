@@ -86,8 +86,9 @@
                (for [row# rows#]
                  (let [~vars row#] ~expr)))))))
 
-;; Rule is a map with at  least find-, when-, and then-clauses.  Rules
-;; involving multiple datasets must supply a from-clause too:
+;; Rule  is represented  by  a map  with at  least  find-, when-,  and
+;; then-clauses.   Rules involving  multiple  datasets  must supply  a
+;; from-clause too:
 (defmacro defrule [rule]
   (compile-rule rule))
 
@@ -102,7 +103,8 @@
                    :find [?x ?y]
                    :when [[$u ?x :is ?z]
                           [$v ?y :is ?z]]
-                   :then [[?x :eq ?y]]})
+                   :then [[?x :le ?y]
+                          [?y :le ?x]]})
       u [["a" :is 1]
          ["b" :is 2]]
       v [["A" :is 1]
