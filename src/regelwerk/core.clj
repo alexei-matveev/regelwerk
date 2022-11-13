@@ -54,51 +54,60 @@
 ;; encode the same three parts, so why bother?
 ;;
 
-;; This  will  return   the  *code*  for  the  rule   as  function  of
-;; facts. People tend to call it compilaiton, that is why the name:
-(defn- do-compile-rule [vars expr where]
-  ;; This will be a function of a fact database:
-  `(fn [facts#]
-     ;; Compute the  result set by  querieng facts with  Datascript. A
-     ;; Datascript  DB can  be as  simple as  a collection  of tuples,
-     ;; mostly  EAV-tuples. The  map-form of  the Datascript  query is
-     ;; more  readable  for  machines, no  need  for  unquote-splicing
-     ;; either.  FWIW,  the Datascript  syntax does  not seem  to make
-     ;; sense without vars. So that the rules with empty list of logic
-     ;; variables do  not compile  at the moment.   FIXME: how  do you
-     ;; check for an existing EAV fact with concrete E, A and V in the
-     ;; DB and generate  new facts depending on  its existence?  Think
-     ;; of "conditional facts" as opposed to "unconditional facts".
-     (let [rows# (d/q '{:find ~vars, :where ~where} facts#)]
-       ;; Generate another set of objects from the supplied collection
-       ;; valued  expression binding  each row  of the  result set  to
-       ;; variables  of a  vector.   Clojure indeed  allows binding  a
-       ;; vector of values to vector of  symbols --- a special case of
-       ;; "destructuring bind", so it is called, I think.
-       (into #{} cat       ; transducer works as (reduce into #{} ...)
-             (for [row# rows#]
-               (let [~vars row#] ~expr))))))
+;; This will return the *code* of a  function for use in a macro or in
+;; an eval. Hence the name:
+(defn- compile-rule [rule]
+  ;; (:from rule) may be nil:
+  (let [{from :from, vars :find, expr :then, when :when} rule]
+    ;; It will be a function one  or more datasets.  As declared, this
+    ;; function  accepts arbitrary  number of  datasets.  However  the
+    ;; Datalog  query in  the body  may  complain about  "Too few"  or
+    ;; "Extra"  inputs  if   the  number  does  not   agree  with  the
+    ;; declarations in the IN/FROM-clause.
+    ;;
+    ;; Compute the  result set  by querieng  facts with  Datascript. A
+    ;; Datascript  DB can  be as  simple  as a  collection of  tuples,
+    ;; mostly EAV-tuples. The map-form of the Datascript query is more
+    ;; readable  for machines,  no need  for unquote-splicing  either.
+    ;; FWIW, the Datascript syntax does not seem to make sense without
+    ;; vars. So that  the rules with empty list of  logic variables do
+    ;; not compile  at the  moment.  FIXME:  how do  you check  for an
+    ;; existing  EAV fact  with concrete  E,  A and  V in  the DB  and
+    ;; generate  new  facts  depending  on its  existence?   Think  of
+    ;; "conditional facts" as opposed to "unconditional facts".
+    `(fn [& args#]
+       ;; Datascript appears to handle the case of nil for the
+       ;; IN-clause just OK:
+       (let [rows# (apply d/q
+                          '{:find ~vars, :in ~from, :where ~when}
+                          args#)]
+         ;; Generate another set of objects from the supplied collection
+         ;; valued  expression binding  each row  of the  result set  to
+         ;; variables  of a  vector.   Clojure indeed  allows binding  a
+         ;; vector of values to vector of  symbols --- a special case of
+         ;; "destructuring bind", so it is called, I think.
+         (into #{} cat     ; transducer works as (reduce into #{} ...)
+               (for [row# rows#]
+                 (let [~vars row#] ~expr)))))))
 
 ;; Hm,  these  arity-1  functions  of (unused)  facts  are  not  quite
 ;; intuitive. No sane rule will return anything starting from an empty
 ;; fact table: (rule  #{}) == #{}, quite intuitively.   But these fact
 ;; functions may and will. Think of Clojure function "constantly" that
 ;; takes input but ignores it completly. What is the arity-0 for?
-(defn- do-compile-facts [expr]
+(defn- compile-facts [expr]
   ;; This must be also a function of a fact database:
   `(fn [unused-facts#] (set ~expr)))
 
 ;; This will also return the unevaled  *code* of the function, not the
 ;; actual function:
-(defn- compile-rule [form]
+(defn- compile-legacy [form]
   (cond
     ;; Case of a map like {:find [...], :when [...], :then [...]}:
     (map? form)
-    (if-let [vars (:find form)]
-      ;; Regular case with all three clauses:
-      (do-compile-rule vars
-                       (:then form)
-                       (:when form))
+    (if (:find form)
+      ;; Regular case:
+      (compile-rule form)
       ;; FIXME: get  rid of  this ugly  special case  for "standalone"
       ;; unconditional facts.   We even ignore  whetever it is  in the
       ;; when clause here.  See "Empty  Graph Lemma": The empty set of
@@ -107,7 +116,7 @@
       ;; facts does not allow anything to be derived from it!
       ;;
       ;; [1] https://www.w3.org/TR/rdf-mt/#entail
-      (do-compile-facts (:then form)))
+      (compile-facts (:then form)))
 
     ;; Another ugly special  case. These (comment ...)  forms are read
     ;; as such.  Is it too much of a special case?  Or are we starting
@@ -122,12 +131,12 @@
     ;; facts:
     (= 1 (count form))
     (let [[expr] form]
-      (do-compile-facts expr))
+      (compile-facts expr))
 
-    ;; Regular case. Three expressions in a list => regular rule:
+    ;; FIXME: Legacy case. Three expressions in a list
     :else
     (let [[vars then when] form]
-      (do-compile-rule vars then when))))
+      (compile-rule {:find vars, :then then, :when when}))))
 
 ;; This defrule only works with a map:
 (defmacro defrule [rule]
@@ -135,7 +144,7 @@
 
 ;; C-u C-x C-e if you want to see expansions:
 (comment
-  (compile-rule
+  (do-compile-rule
    '{:find [?a ?b]
      :then [[?b ?a]]
      :when [[?a :is ?b]]})
@@ -179,7 +188,7 @@
 ;; will  thus  be  typicall  3  and somtimes  1.   The  working  horse
 ;; "compile-rule" is supposed to handle both cases accordingly.
 (defn- compile-rules [rules]
-  (let [fs (map compile-rule rules)]
+  (let [fs (map compile-legacy rules)]
     `(fn [facts#]
        (into #{} cat (for [f# [~@fs]]
                        (f# facts#))))))
