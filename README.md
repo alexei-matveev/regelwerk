@@ -115,6 +115,22 @@ Maybe an interesting read:
 * [Fixpoints for the Masses:
   Programming with First-Class Datalog Constraints](https://dl.acm.org/doi/pdf/10.1145/3428193) proposes composable Datalog programs as Data.
 
+## ChangeLog
+
+Some future version 0.0.X:
+
+* Rules involving more than one dataset: `{:from [$a $b], :when [[$a
+  ...], [$b ...]]}`.
+* BREAKING: Some next version will no more accept list-syntax for
+  rules. Convert the lists to maps with `:find`, `:then`, and `:when`
+  keys in that sequence.
+* BREAKING: A rule that returns any facts derived from an empty
+  dataset likely violates "empty graph lemma". Therefore the special
+  case of `{:then [...]}` akin to `(constantly [...])` that returns
+  fact no matter what must go. In the unlikely case that this edge
+  case affects you, consider some seed- or ground facts in your
+  dataset like `["version" :ge "0.0.x"]` or `["water" :is "wet"]`...
+
 ## License
 
 Copyright © 2022 Alexei Matveev <alexei.matveev@gmail.com>
