@@ -100,35 +100,22 @@
   `(fn [& unused-args#] (set ~expr)))
 
 ;; This will also return the unevaled  *code* of the function, not the
-;; actual function:
+;; actual function:  Only Maps like  {:find [...], :when  [...], :then
+;; [...]}  are  accepted, find-clause  maybe missing for  a deprecated
+;; use case:
 (defn- compile-legacy [form]
-  (cond
-    ;; Case of a map like {:find [...], :when [...], :then [...]}:
-    (map? form)
-    (if (:find form)
-      ;; Regular case:
-      (compile-rule form)
-      ;; FIXME: get  rid of  this ugly  special case  for "standalone"
-      ;; unconditional facts.   We even ignore  whetever it is  in the
-      ;; when clause here.  See "Empty  Graph Lemma": The empty set of
-      ;; triples is  entailed by  any graph, and  does not  entail any
-      ;; graph except itself [1]. This basically means en empty set of
-      ;; facts does not allow anything to be derived from it!
-      ;;
-      ;; [1] https://www.w3.org/TR/rdf-mt/#entail
-      (compile-facts (:then form)))
-
-    ;; FIXME:  get  rid of  this  ugly  special case  of  "standalone"
-    ;; unconditional  facts.   One  expression in  list  evaluates  to
-    ;; facts:
-    (= 1 (count form))
-    (let [[expr] form]
-      (compile-facts expr))
-
-    ;; FIXME: Legacy case. Three expressions in a list
-    :else
-    (let [[vars then when] form]
-      (compile-rule {:find vars, :then then, :when when}))))
+  (if (:find form)
+    ;; Regular case:
+    (compile-rule form)
+    ;; FIXME: get  rid of  this ugly  special case  for "standalone"
+    ;; unconditional facts.   We even ignore  whetever it is  in the
+    ;; when clause here.  See "Empty  Graph Lemma": The empty set of
+    ;; triples is  entailed by  any graph, and  does not  entail any
+    ;; graph except itself [1]. This basically means en empty set of
+    ;; facts does not allow anything to be derived from it!
+    ;;
+    ;; [1] https://www.w3.org/TR/rdf-mt/#entail
+    (compile-facts (:then form))))
 
 ;; This defrule only works with a map:
 (defmacro defrule [rule]
