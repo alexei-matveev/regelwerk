@@ -72,7 +72,7 @@
 ;; Do you still hope to be able to extract free logic variables out of
 ;; an arbitrary expression?
 (deftest test-4
-  (testing "Logic variables and bindings in a single expression (map syntax)"
+  (testing "Logic variables and bindings in a single expression ..."
     (let [rules (defrules
                   {:find [?a]
                    :then [[?a :vs (let [?a (str "p" ?a)] ?a)]]
@@ -82,14 +82,10 @@
              #{[2 :vs "p2"] [1 :vs "p1"]})))))
 
 (deftest test-5
-  (testing "Single arity rule is plain facts ..."
+  (testing "Rule without logic variables delivers facts unconditionally (deprecated) ..."
     (let [rules (defrules
-                  ([[1 :is "odd"]
-                    [2 :is "even"]]))
-          rulez (defrules
                   {:then [[1 :is "odd"]
                           [2 :is "even"]]})
           facts [[:does] [:not] [:matter]]]
       (is (= (rules facts)
-             (rulez facts)
              #{[1 :is "odd"] [2 :is "even"]})))))
