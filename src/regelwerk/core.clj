@@ -57,7 +57,9 @@
 ;; This will return the *code* of a  function for use in a macro or in
 ;; an eval. Hence the name:
 (defn- compile-rule [rule]
-  ;; (:from rule) may be nil:
+  ;; Here (:from rule) may be nil, but even in that case query expects
+  ;; exactly one dataset as input. Datascript leave declaration of the
+  ;; single dataset, {:from [$], :when [[$ ...], ...], ...}, optional.
   (let [{from :from, vars :find, expr :then, when :when} rule]
     ;; It will be a function one  or more datasets.  As declared, this
     ;; function  accepts arbitrary  number of  datasets.  However  the
