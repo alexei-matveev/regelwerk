@@ -118,14 +118,6 @@
       ;; [1] https://www.w3.org/TR/rdf-mt/#entail
       (compile-facts (:then form)))
 
-    ;; Another ugly special  case. These (comment ...)  forms are read
-    ;; as such.  Is it too much of a special case?  Or are we starting
-    ;; to  write an  interpreter?  FIXME:  one should  probably filter
-    ;; them  out earlier  in compile-rules  instead of  producing noop
-    ;; stubs.
-    (= 'comment (first form))
-    `(constantly #{})
-
     ;; FIXME:  get  rid of  this  ugly  special case  of  "standalone"
     ;; unconditional  facts.   One  expression in  list  evaluates  to
     ;; facts:

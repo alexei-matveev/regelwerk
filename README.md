@@ -125,6 +125,8 @@ Some future version 0.0.X:
   with `:find`, `:then`, and `:when` keys in that sequence.
 * BREAKING: Singular form `(defrule vars expr where)` is no more
   supported. Use maps instead.
+* BREAKING: `(comment ...)` forms in Rules are no more handled
+  specially. Use Reader Comment `#_` instead.
 * DEPRECATED: A rule that returns any facts derived from an empty
   dataset likely violates "empty graph lemma". Therefore the special
   case of `{:then [...]}` akin to `(constantly [...])` that returns
