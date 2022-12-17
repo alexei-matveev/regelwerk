@@ -23,21 +23,21 @@
 
 (deftest binary-rule
   (testing "Binary rule with two fact databases as input  ..."
-    (let [r (defrule {:from [$u $v]
-                      :find [?x ?y]
-                      :when [[$u ?x :is ?z]
-                             [$v ?y :is ?z]]
-                      :then [[?x :le ?y]
-                             [?y :le ?x]]})
-          u [["a" :is 1]
-             ["b" :is 2]]
-          v [["A" :is 1]
-             ["B" :is 2]]]
-      (is (= (r u v)
-             #{["B" :le "b"]
-               ["A" :le "a"]
-               ["b" :le "B"]
-               ["a" :le "A"]})))))
+    (let [en [[1 :is "odd"]
+              [2 :is "even"]]
+          de [[1 :ist "ungerade"]
+              [2 :ist "gerade"]]
+          tr (defrule {:from [$en $de]
+                       :find [?word ?wort]
+                       :when [[$en ?n :is ?word]
+                              [$de ?n :ist ?wort]]
+                       :then [[?word :eqv ?wort]
+                              [?wort :eqv ?word]]})]
+      (is (= (tr en de)
+             #{["odd" :eqv "ungerade"]
+               ["gerade" :eqv "even"]
+               ["ungerade" :eqv "odd"]
+               ["even" :eqv "gerade"]})))))
 
 (deftest test-1
   (testing "Function calls in expressions ..."
