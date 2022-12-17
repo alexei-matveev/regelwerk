@@ -21,6 +21,24 @@
                [2 :ist "gerade"]
                [3 :ist "ungerade"]})))))
 
+(deftest binary-rule
+  (testing "Binary rule with two fact databases as input  ..."
+    (let [r (defrule {:from [$u $v]
+                      :find [?x ?y]
+                      :when [[$u ?x :is ?z]
+                             [$v ?y :is ?z]]
+                      :then [[?x :le ?y]
+                             [?y :le ?x]]})
+          u [["a" :is 1]
+             ["b" :is 2]]
+          v [["A" :is 1]
+             ["B" :is 2]]]
+      (is (= (r u v)
+             #{["B" :le "b"]
+               ["A" :le "a"]
+               ["b" :le "B"]
+               ["a" :le "A"]})))))
+
 (deftest test-1
   (testing "Function calls in expressions ..."
     (let [rule (defrules
