@@ -105,6 +105,8 @@ Deploy Tokens generated at Clojars, likely stored in your KeePass.
 * Another unifier-based query
   [engine](https://github.com/jimmyhmiller/one-hundred-lines-or-less/tree/master/libraries/clojure/query-engine/src/query_engine)
 * [Meander](https://github.com/noprompt/meander)
+* [Knowledge Machine](https://www.cs.utexas.edu/%7Emfkb/km.html) from
+  around 1997 or before.
 
 Maybe an interesting read:
 
