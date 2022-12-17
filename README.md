@@ -47,10 +47,32 @@ very database that was "queried".
 Would such a calculus be useful or is it just mind gymnastics just to
 [reinvent](https://en.wikipedia.org/wiki/Language_Integrated_Query)
 [the](https://www.w3.org/TR/rdf-mt/#rules)
-[wheel](https://en.wikipedia.org/wiki/Relational_algebra)?  Think of
-composable programs with "Rules" operating on "Sets of Facts".  Think
-of N-ary Rules taking zero, one or more "Sets of Facts" as arguments
-and producing even more of that as a result:
+[wheel](https://en.wikipedia.org/wiki/Relational_algebra)? Here is an
+example of Binary Rule that compares two datasets, `en` and `de`, to
+deduce a translation between English and German:
+
+```clojure
+(let [en [[1 :is "odd"]
+          [2 :is "even"]]
+      de [[1 :ist "ungerade"]
+          [2 :ist "gerade"]]
+      tr (defrule {:from [$en $de]
+                   :find [?word ?wort]
+                   :when [[$en ?n :is ?word]
+                          [$de ?n :ist ?wort]]
+                   :then [[?word :eqv ?wort]
+                          [?wort :eqv ?word]]})]
+  (tr en de))
+;; =>
+#{["odd" :eqv "ungerade"]
+  ["gerade" :eqv "even"]
+  ["ungerade" :eqv "odd"]
+  ["even" :eqv "gerade"]}
+```
+
+Think of composable programs with "Rules" operating on "Sets of
+Facts".  Think of N-ary Rules taking zero, one or more "Sets of Facts"
+as arguments and producing even more of that as a result:
 
     Rules:: Facts1 -> Facts2 -> ... -> FactsN
 
