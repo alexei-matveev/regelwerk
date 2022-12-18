@@ -47,7 +47,7 @@
 ;; 4-letter names:
 ;;
 ;;   {:find [?a ?b] :when [[?a :is ?b]] :then [[?a :is "thing"]]}
-;;   {:then [["water" :is "wet"]]}   ;; But see the empty graph lemma!
+;;   {:then [["water" :is "wet"]]} ;; DEPRECATED!
 ;;
 ;; The former  is almost a  valid Datascript query  with s/where/when/
 ;; and extended  by a "then"  expression.  Basically any  syntax would
@@ -63,6 +63,10 @@
 ;;      :when [[$a ?e :a ?x]
 ;;             [$b ?e :b ?y] ...]
 ;;      :then [[?x :ab ?y] ...]})
+;;
+;; Also,  we should  probably still  distinguish standalone  facts and
+;; deprecated functions below that return facts unconditionally. We do
+;; distinguish x and (lambda [...] x), dont we?
 ;;
 
 ;; This will return the *code* of a  function for use in a macro or in
