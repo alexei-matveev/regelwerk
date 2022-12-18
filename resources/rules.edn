@@ -20,6 +20,6 @@
  [["text" :is :string]
   [nil :is nil]]}
 
-;; The reader comment renders the next form practically non-existant:
-#_(comment "Hi!")
+;; The reader comment renders the next form practically non-existent:
+#_(println "Hi!")
 
