@@ -31,7 +31,7 @@
 ;; Many  syntaxes for  rules  are  possible to  choose  from. This  is
 ;; probably  the  case when  the  choice  is  bad.  Maybe  one  should
 ;; postulate that a "rule without body is a fact"?  "A fact is true no
-;; matter what", like PAIP says.  This could limit the choises for the
+;; matter what", like PAIP says.  This could limit the choices for the
 ;; "most parctical" syntax  by e.g.  favoring the  "head first" syntax
 ;; as in Prolog:
 ;;
@@ -64,9 +64,9 @@
 ;;             [$b ?e :b ?y] ...]
 ;;      :then [[?x :ab ?y] ...]})
 ;;
-;; Also,  we should  probably still  distinguish standalone  facts and
+;; Also, we  should probably  better distinguish standalone  facts and
 ;; deprecated functions below that return facts unconditionally. We do
-;; distinguish x and (lambda [...] x), dont we?
+;; need to distinguish x and (constantly x), don't we?
 ;;
 
 ;; This will return the *code* of a  function for use in a macro or in
