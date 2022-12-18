@@ -142,7 +142,7 @@ Maybe an interesting read:
 
 ## ChangeLog
 
-Some future version 0.0.X:
+Version 0.0.3-SNAPSHOT:
 
 * Rules involving more than one dataset: `{:from [$a $b], :when [[$a
   ...], [$b ...]], :then [...]}`.
@@ -155,9 +155,9 @@ Some future version 0.0.X:
 * DEPRECATED: A rule that returns any facts derived from an empty
   dataset likely violates "empty graph lemma". Therefore the special
   case of `{:then [...]}` akin to `(constantly [...])` that returns
-  fact no matter what must go. In the unlikely case that this edge
+  facts "no matter what" must go. In the unlikely case that this edge
   case affects you, consider some seed- or ground facts in your
-  dataset like `["version" :ge "0.0.x"]` or `["water" :is "wet"]`...
+  dataset like `["version" :ge "0.0.3"]` or `["water" :is "wet"]`...
 
 ## License
 
