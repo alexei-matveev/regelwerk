@@ -176,13 +176,13 @@
 ;; for that.  The working horse "compile-legacy" is supposed to handle
 ;; this case for a while.
 ;;
-;; FIXME: NON N-ary ready, see (fn [facts#] ...) in the code.
+;; N-ary ready, see (fn [& args#] ...) in the code.
 (defn- compile-rules [rules]
   ;; FIXME: use compile-rule directly once legacy is gone:
   (let [fs (map compile-legacy rules)]
-    `(fn [facts#]
+    `(fn [& args#]
        (into #{} cat (for [f# [~@fs]]
-                       (f# facts#))))))
+                       (apply f# args#))))))
 
 (defmacro defrules [& rules]
   (compile-rules rules))
