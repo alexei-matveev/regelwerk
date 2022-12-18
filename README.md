@@ -98,7 +98,7 @@ With that said, here is the memo:
     $ lein deploy clojars
 
 The artifact goes to
-[f0becod/regelwerk](https://clojars.org/f0bec0d/regelwerk) repository
+[f0bec0d/regelwerk](https://clojars.org/f0bec0d/regelwerk) repository
 so the user name will be ``f0bec0d``.  The passwort is one of the
 Deploy Tokens generated at Clojars, likely stored in your KeePass.
 
