@@ -104,9 +104,16 @@
                (for [row# rows#]
                  (let [~vars row#] ~expr)))))))
 
-;; Hm, these  functions of arbitrary  number of (unused)  datasets are
-;; not quite  intuitive. No  sane rule  will return  anything starting
-;; from an  empty fact  table: (rule #{})  == #{},  quite intuitively.
+;; DPRECATED: Because you  should not be able to  deduce anything from
+;; an empty set of assumptions. If  you just want some ready facts use
+;; fact  database  or generate  a  set  of  facts with  plain  Clojure
+;; code. If you  want them to come  from a rule function  pass them to
+;; the build in identity function, if it  must be. There is a built in
+;; functions "constantly" for that.
+;;
+;; Again, these functions of arbitrary number of (unused) datasets are
+;; not intuitive  at all. No  sane rule will return  anything starting
+;; from an  empty fact  table: (rule #{})  == #{},  quite "naturally".
 ;; But these fact functions may and will.
 ;;
 ;; N-ary  ready. Built  in  "constantly" accepts  arbitrary number  of
