@@ -18,3 +18,11 @@
         facts
         (recur (clojure.set/union facts extra')
                extra')))))
+
+;; What were  the name  for a  pattern when  searching for  a fixpoint
+;; while  keeping the  two tables  separate?  Think  of a  binary rule
+;; [$extra $facts] -> $extra' and repeating again and again.  This can
+;; be viewed  as a fixpoint on  $extra in a world  of global immutable
+;; $facts.  Or,  equivalently, a  fixpoint on  tuple where  the second
+;; half is  passed unmodified. However returning  multiple fact tables
+;; is not how a plain rule set works ...
