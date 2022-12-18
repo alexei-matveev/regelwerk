@@ -99,8 +99,12 @@
       (is (= (rules facts)
              #{[2 :vs "p2"] [1 :vs "p1"]})))))
 
+;; DPRECATED: Because you  should not be able to  deduce anything from
+;; an empty set  of assumptions. If you just want  some facts use fact
+;; database. If you  want them to come from a  rule function pass them
+;; to the build in identity function, if it must be.
 (deftest test-5
-  (testing "Rule without logic variables delivers facts unconditionally (deprecated) ..."
+  (testing "Rule without logic variables delivers facts unconditionally (DEPRECATED) ..."
     (let [rules (defrules
                   {:then [[1 :is "odd"]
                           [2 :is "even"]]})
