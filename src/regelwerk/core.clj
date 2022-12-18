@@ -53,6 +53,17 @@
 ;; and extended  by a "then"  expression.  Basically any  syntax would
 ;; encode the same three parts, so why bother?
 ;;
+;; On the  other hand, if we  go full scale lambda  calculus with fact
+;; tables, maybe  we want a  handy syntax  for named n-ary  rules that
+;; acts like other "defs"?
+;;
+;;   (defrules n-ary-rule [$a $b ...]
+;;     {:find [?x ?y ...]
+;;      ;; :from [$a $b ...] redundant, unless you want to rename $a, $b
+;;      :when [[$a ?e :a ?x]
+;;             [$b ?e :b ?y] ...]
+;;      :then [[?x :ab ?y] ...]})
+;;
 
 ;; This will return the *code* of a  function for use in a macro or in
 ;; an eval.  Hence the name.  N-ary  ready, see (fn [&  args#] ...) in
