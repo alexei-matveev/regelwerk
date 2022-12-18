@@ -55,7 +55,8 @@
 ;;
 
 ;; This will return the *code* of a  function for use in a macro or in
-;; an eval. Hence the name:
+;; an eval.  Hence the name.  N-ary  ready, see (fn [&  args#] ...) in
+;; the code.
 (defn- compile-rule [rule]
   ;; Here (:from rule) may be nil, but even in that case query expects
   ;; exactly one dataset as input. Datascript leave declaration of the
@@ -97,6 +98,9 @@
 ;; from an  empty fact  table: (rule #{})  == #{},  quite intuitively.
 ;; But these  fact functions may  and will. Think of  Clojure function
 ;; "constantly" that takes input but ignores it completly.
+;;
+;; N-ary ready.   See (fn [&  unused-args#] ...).  In fact  it accepts
+;; arbitrary number of the databases and ignores them.
 (defn- compile-facts [expr]
   ;; This must be also a function of a fact database:
   `(fn [& unused-args#] (set ~expr)))
@@ -104,7 +108,9 @@
 ;; This will also return the unevaled  *code* of the function, not the
 ;; actual function:  Only Maps like  {:find [...], :when  [...], :then
 ;; [...]}  are  accepted, find-clause  maybe missing for  a deprecated
-;; use case:
+;; use case.
+;;
+;; N-ary ready because compile-rule & compile-facts are.
 (defn- compile-legacy [form]
   (if (:find form)
     ;; Regular case:
@@ -119,7 +125,8 @@
     ;; [1] https://www.w3.org/TR/rdf-mt/#entail
     (compile-facts (:then form))))
 
-;; This defrule only works with a map:
+;; This defrule only works with a map. N-ary ready because
+;; compile-rule is.
 (defmacro defrule [rule]
   (compile-rule rule))
 
@@ -167,6 +174,8 @@
 ;; facts free of  variables conditions --- a rule with  just one form,
 ;; the  fact-valued  expression  :then   itself.   The  working  horse
 ;; "compile-legacy" is supposed to handle this case for a while.
+;;
+;; FIXME: NON N-ary ready, see (fn [facts#] ...) in the code.
 (defn- compile-rules [rules]
   ;; FIXME: use compile-rule directly once legacy is gone:
   (let [fs (map compile-legacy rules)]
