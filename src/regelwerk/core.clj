@@ -146,7 +146,7 @@
 ;; - The initial facts dont actually need to  be a Set like #{}. It is
 ;;   common, also in this code to use  a vector [] when actually a Set
 ;;   ist  meant  --- just  look  at  all  the examples.   Moreover,  a
-;;   Datascript quqery will accept a proper DB of facts as input. Will
+;;   Datascript query will accept a proper  DB of facts as input. Will
 ;;   it also support (into ...)?
 ;;
 ;; - A  generalization  of  the  above objection  might  be  a  strict
@@ -161,14 +161,14 @@
 ;; sophisticated and  "compile" rules  one by one  here.  But  this is
 ;; likely better suited to become a part of the public interface.
 ;;
-;; Normally the rule consists of  variable vector, an expression and a
-;; where query --- a  list of three forms. However we  want to be able
-;; to  special  case  on  the  "universal"  facts  free  of  variables
-;; conditions  ---  a  rule  with   just  one  form,  the  fact-valued
-;; expression itself. The  length of lists in  the sequence "artities"
-;; will  thus  be  typicall  3  and somtimes  1.   The  working  horse
-;; "compile-rule" is supposed to handle both cases accordingly.
+;; Normally a  rule consists of  variable vector :find,  an expression
+;; :then and a  condition/query :when. DEPRECATED: However  we habe to
+;; still handle a  special case of the  "universal" or "unconditional"
+;; facts free of  variables conditions --- a rule with  just one form,
+;; the  fact-valued  expression  :then   itself.   The  working  horse
+;; "compile-legacy" is supposed to handle this case for a while.
 (defn- compile-rules [rules]
+  ;; FIXME: use compile-rule directly once legacy is gone:
   (let [fs (map compile-legacy rules)]
     `(fn [facts#]
        (into #{} cat (for [f# [~@fs]]
