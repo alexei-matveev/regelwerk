@@ -3,7 +3,8 @@
 ;; of src/.
 ;;
 (ns regelwerk.main
-  (:require [regelwerk.core :as rwk])
+  (:require [regelwerk.core :as core]
+            [regelwerk.lambda :as lambda])
   (:gen-class))
 
 ;;
@@ -56,16 +57,19 @@
 (defn- main [facts-path rules-path]
   ;; Here slurp-edn would also work  for facts, except it would return
   ;; a list, not a set:
-  (let [facts (rwk/read-facts facts-path)
-        rules (rwk/load-rules rules-path)]
-    ;;
+  (let [facts (core/read-facts facts-path)
+        rules (core/load-rules rules-path)]
+
+    ;; Fixpoint  calculation  only  terminates  if the  rules  do  not
+    ;; inflate the fact table indefinitely:
+    (println (lambda/fix rules facts))
+
     ;; Very functional way to iterate lazily:
     ;;
     ;;     (iterate f x) = (x (f x) (f (f x)) ...)
     ;;
     ;; You may want to compare behaviour of the original and "dressed"
     ;; rules.
-    ;;
     (doseq [facts (take 4 (iterate (dress rules) facts))]
       (println facts))))
 
