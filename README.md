@@ -56,12 +56,13 @@ deduce a translation between English and German:
           [2 :is "even"]]
       de [[1 :ist "ungerade"]
           [2 :ist "gerade"]]
-      tr (defrules {:from [$en $de]
-                    :find [?word ?wort]
-                    :when [[$en ?n :is ?word]
-                           [$de ?n :ist ?wort]]
-                    :then [[?word :eqv ?wort]
-                           [?wort :eqv ?word]]})]
+      tr (defrules
+           {:from [$en $de]
+            :find [?word ?wort]
+            :when [[$en ?n :is ?word]
+                   [$de ?n :ist ?wort]]
+            :then [[?word :eqv ?wort]
+                   [?wort :eqv ?word]]})]
   (tr en de))
 ;; =>
 #{["odd" :eqv "ungerade"]
