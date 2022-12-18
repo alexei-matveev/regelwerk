@@ -7,15 +7,22 @@
 ;; many times yourself. Also the original  facts are in general from a
 ;; "different  domain" so  that you  will  have to  pass them  through
 ;; yourself here or set/union in the code:
-{:find [?n]
- :then [[(mod (inc ?n) 4) :is :int]
-        [(mod (dec ?n) 4) :is :int]]
- :when [[?n :is :int]]}
+{:find [?n ?mod]
+ :when [[?n :is "even"]
+        [:modulo ?mod]]
+ :then [[(mod (inc ?n) ?mod) :is "odd"]
+        [(mod (dec ?n) ?mod) :is "odd"]]}
 
-;; Unconditional   rules   without   logic  variables   just   produce
-;; facts. However these are "output domain" facts, not the same "input
-;; domain" facts  as those in  ./facts.edn. FIXME: these are  ugly and
-;; probably must die.
+{:find [?n ?mod]
+ :when [[?n :is "odd"]
+        [:modulo ?mod]]
+ :then [[(mod (inc ?n) ?mod) :is "even"]
+        [(mod (dec ?n) ?mod) :is "even"]]}
+
+;; DEPRECATED:  these  are  ugly  and  will  be  removed.   These  are
+;; unconditional  rules  without  logic variables  that  just  produce
+;; facts.   However these  are  "output domain"  facts,  not the  same
+;; "input domain" facts as those in ./facts.edn.
 {:then
  [["text" :is :string]
   [nil :is nil]]}
