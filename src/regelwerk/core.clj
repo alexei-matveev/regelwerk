@@ -107,14 +107,13 @@
 ;; Hm, these  functions of arbitrary  number of (unused)  datasets are
 ;; not quite  intuitive. No  sane rule  will return  anything starting
 ;; from an  empty fact  table: (rule #{})  == #{},  quite intuitively.
-;; But these  fact functions may  and will. Think of  Clojure function
-;; "constantly" that takes input but ignores it completly.
+;; But these fact functions may and will.
 ;;
-;; N-ary ready.   See (fn [&  unused-args#] ...).  In fact  it accepts
-;; arbitrary number of the databases and ignores them.
+;; N-ary  ready. Built  in  "constantly" accepts  arbitrary number  of
+;; arguments and ignores them.
 (defn- compile-facts [expr]
   ;; This must be also a function of a fact database:
-  `(fn [& unused-args#] (set ~expr)))
+  `(constantly (set ~expr)))
 
 ;; This will also return the unevaled  *code* of the function, not the
 ;; actual function:  Only Maps like  {:find [...], :when  [...], :then
