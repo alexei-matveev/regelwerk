@@ -109,7 +109,8 @@
 ;; fact  database  or generate  a  set  of  facts with  plain  Clojure
 ;; code. If you  want them to come  from a rule function  pass them to
 ;; the build in identity function, if it  must be. There is a built in
-;; functions "constantly" for that.
+;; function "constantly"  too that  takes arbitrary arguments  to just
+;; ignore them.
 ;;
 ;; Again, these functions of arbitrary number of (unused) datasets are
 ;; not intuitive  at all. No  sane rule will return  anything starting
