@@ -1,6 +1,28 @@
 (ns regelwerk.lambda
+  ;; FIXME: these imports are historical only:
   (:require [datascript.core :as d]
             [regelwerk.core :as c]))
+
+;; Fixpoint   calculation.    As   a   "poor   man"   recursive   rule
+;; application. Should  we use  clojure.set/union or (into  facts ...)
+;; or yet  something else? Do we  convert the input with  (set ...) or
+;; assume the  caller is responsible?   What do we actually  assume of
+;; our  databases representations?   Otherwise  this  is very  generic
+;; procedure that requires  neither regelwerk.core nor datascript.core
+;; of the imports above.
+(defn fix [rules facts & rest]
+  ;; In case some "careless" caller supplied facts as a vector convert
+  ;; them to a set at the outset:
+  (loop [facts (set facts)
+         extra #{}]
+    (let [extra' (apply rules facts rest)]
+      ;; (println "did it again ...")
+      (if (= extra' extra)
+        facts
+        (recur (clojure.set/union facts extra')
+               extra')))))
+
+;; *** NO CODE, ONLY HISTORICAL COMMENTS, BELOW THIS POINT! ***
 
 ;; Motivation and thoughts ...
 (comment
