@@ -168,12 +168,13 @@
 ;; sophisticated and  "compile" rules  one by one  here.  But  this is
 ;; likely better suited to become a part of the public interface.
 ;;
-;; Normally a  rule consists of  variable vector :find,  an expression
-;; :then and a  condition/query :when. DEPRECATED: However  we habe to
+;; DEPRECATED: Normally a  rule consists of variable  vector :find, an
+;; expression :then  and a condition/query  :when. However we  have to
 ;; still handle a  special case of the  "universal" or "unconditional"
 ;; facts free of  variables conditions --- a rule with  just one form,
-;; the  fact-valued  expression  :then   itself.   The  working  horse
-;; "compile-legacy" is supposed to handle this case for a while.
+;; the fact-valued expression :then itself. There is still a test case
+;; for that.  The working horse "compile-legacy" is supposed to handle
+;; this case for a while.
 ;;
 ;; FIXME: NON N-ary ready, see (fn [facts#] ...) in the code.
 (defn- compile-rules [rules]
