@@ -133,6 +133,7 @@ Deploy Tokens generated at Clojars, likely stored in your KeePass.
 
 Maybe an interesting read:
 
+* Better Together: Unifying Datalog and Equality Saturation [PDF](https://arxiv.org/pdf/2304.04332.pdf)
 * [Is Datalog a good language for
   authorization?](https://neilmadden.blog/2022/02/19/is-datalog-a-good-language-for-authorization/)
   and the HN
