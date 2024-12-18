@@ -140,6 +140,8 @@ Maybe an interesting read:
   [discussion](https://news.ycombinator.com/item?id=30400886)
 * [Fixpoints for the Masses:
   Programming with First-Class Datalog Constraints](https://dl.acm.org/doi/pdf/10.1145/3428193) proposes composable Datalog programs as Data.
+* [AP5](https://www.ap5.com) dates back to at least as early as 1986.
+  
 
 ## ChangeLog
 
